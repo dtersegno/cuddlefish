@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://csro2nic42h36"]
 
 [ext_resource type="Script" path="res://grid.gd" id="1_5w3ed"]
-[ext_resource type="Script" path="res://cuddlebutton.gd" id="2_t51au"]
+[ext_resource type="Script" path="res://cuddler.gd" id="2_o3fhd"]
 
 [node name="Cuddlefish" type="Control"]
 layout_mode = 3
@@ -22,11 +22,20 @@ grow_vertical = 2
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+text = "Cuddlefish"
+fit_content = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
 
 [node name="Grid" type="GridContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -38,10 +47,61 @@ script = ExtResource("1_5w3ed")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("2_o3fhd")
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/HBoxContainer/Grid/Cuddler"]
+layout_mode = 2
+columns = 3
+
+[node name="UL" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="U" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="UR" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="L" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="C" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="R" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DL" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="D" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DR" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Grid/Cuddler"]
 layout_mode = 2
-script = ExtResource("2_t51au")
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5

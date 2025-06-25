@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://ddml7s4viwma8"]
+
+[ext_resource type="Script" path="res://cuddler.gd" id="1_grgvv"]
+[ext_resource type="Script" path="res://cuddlebutton.gd" id="2_6tw57"]
+
+[node name="Cuddler" type="PanelContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_grgvv")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+script = ExtResource("2_6tw57")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 2

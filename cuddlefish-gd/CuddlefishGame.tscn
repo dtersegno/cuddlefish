@@ -99,6 +99,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Grid/Cuddler"]
+show_behind_parent = true
 layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]

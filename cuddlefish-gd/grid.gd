@@ -6,11 +6,9 @@ extends GridContainer
 func _ready() -> void:
 	create_cuddlefish(24)
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-
 
 func create_cuddlefish(number_to_create:int):
 	for new_cuddler_counter in range(number_to_create):

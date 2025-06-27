@@ -1,11 +1,13 @@
 extends GridContainer
 
-@onready var cuddler_prime = $Cuddler
+@onready var cuddler_prime = $Cuddler_Prime
+
+var cuddler = preload("res://cuddler.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	create_cuddlefish(24)
-	cuddler_prime.connect()
+	create_cuddlefish(25)
+	cuddler_prime.queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -13,7 +15,7 @@ func _process(_delta: float) -> void:
 
 func create_cuddlefish(number_to_create:int):
 	for new_cuddler_counter in range(number_to_create):
-		var new_cuddler = cuddler_prime.duplicate()
+		var new_cuddler = cuddler.instantiate()
 		self.add_child(new_cuddler)
 		new_cuddler.add_to_group('cuddlers')
 
@@ -39,6 +41,15 @@ var comparisons = {
 	"EC_R": [7,1], #lower right to upper right
 	"EC_U": [1,3], #upper right to upper left
 	"EC_D": [7,5], #lower right to lower left
+}
+
+var squares_to_compare_25 = {
+	"V":[
+		[0,5],[1,6],[2,7],[3,8],[4,9],
+		[5,10],[6,11],[7,12],[8,13],[9,14],
+		[10,15],[11,16],[12,17],[13,18],[14,19],
+		[15,20],[16,21],[17,22],[18,23],[19,24]
+	]
 }
 
 func cuddle_compare(cuddler1, cuddler2, comparison):

@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://csro2nic42h36"]
+[gd_scene load_steps=3 format=3 uid="uid://csro2nic42h36"]
 
 [ext_resource type="Script" path="res://grid.gd" id="1_5w3ed"]
-[ext_resource type="Script" path="res://cuddler.gd" id="2_o3fhd"]
-[ext_resource type="AudioStream" uid="uid://dl08rvey0ptbq" path="res://sounds/bonk.mp3" id="3_0ewu2"]
+[ext_resource type="PackedScene" uid="uid://ddml7s4viwma8" path="res://cuddler.tscn" id="2_3n4av"]
 
 [node name="Cuddlefish" type="Control"]
 layout_mode = 3
@@ -44,74 +43,61 @@ size_flags_horizontal = 3
 columns = 5
 script = ExtResource("1_5w3ed")
 
-[node name="Cuddler" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Grid"]
+[node name="Cuddler_Prime" parent="VBoxContainer/HBoxContainer/Grid" instance=ExtResource("2_3n4av")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-script = ExtResource("2_o3fhd")
-
-[node name="Sound" type="Node" parent="VBoxContainer/HBoxContainer/Grid/Cuddler"]
-
-[node name="Spin" type="AudioStreamPlayer2D" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/Sound"]
-position = Vector2(231, 27)
-stream = ExtResource("3_0ewu2")
-
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/HBoxContainer/Grid/Cuddler"]
-layout_mode = 2
-columns = 3
-
-[node name="UL" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="U" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="UR" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="L" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="C" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="R" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="DL" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="D" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="DR" type="ColorRect" parent="VBoxContainer/HBoxContainer/Grid/Cuddler/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Grid/Cuddler"]
-show_behind_parent = true
-z_index = -1
-layout_mode = 2
-mouse_default_cursor_shape = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="H Button" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "H"
+
+[node name="V Button" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "V"
+
+[node name="D1 Button" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "D1"
+
+[node name="D2 Button" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "D2"
+
+[node name="EC R" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EC R"
+
+[node name="EC U" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EC U"
+
+[node name="EC L" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EC L"
+
+[node name="EC D" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EC D"
+
+[node name="EE R" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EE R"
+
+[node name="EE U" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EE U"
+
+[node name="EE L" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EE L"
+
+[node name="EE D" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EE D"

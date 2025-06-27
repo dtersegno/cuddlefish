@@ -108,6 +108,7 @@ func rotate_45():
 
 func rotate_90():
 	#duplicate self to spin for visual
+	spinning.emit()
 	var visual_square = self.duplicate()
 	visual_square.cuddle_colors = self.cuddle_colors
 	visual_square.color_to_index = self.color_to_index

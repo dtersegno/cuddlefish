@@ -107,7 +107,9 @@ size_flags_vertical = 3
 
 [node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Grid/Cuddler"]
 show_behind_parent = true
+z_index = -1
 layout_mode = 2
+mouse_default_cursor_shape = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2

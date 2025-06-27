@@ -1,16 +1,70 @@
 [gd_scene load_steps=3 format=3 uid="uid://ddml7s4viwma8"]
 
-[ext_resource type="Script" path="res://cuddler.gd" id="1_grgvv"]
-[ext_resource type="Script" path="res://cuddlebutton.gd" id="2_6tw57"]
+[ext_resource type="Script" path="res://cuddler.gd" id="1_6yg76"]
+[ext_resource type="AudioStream" uid="uid://dl08rvey0ptbq" path="res://sounds/bonk.mp3" id="2_b7eth"]
 
 [node name="Cuddler" type="PanelContainer"]
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_grgvv")
+script = ExtResource("1_6yg76")
+
+[node name="Sound" type="Node" parent="."]
+
+[node name="Spin" type="AudioStreamPlayer2D" parent="Sound"]
+position = Vector2(231, 27)
+stream = ExtResource("2_b7eth")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 3
+
+[node name="UL" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="U" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="UR" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="L" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="C" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="R" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DL" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="D" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DR" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Button" type="Button" parent="."]
+show_behind_parent = true
+z_index = -1
 layout_mode = 2
-script = ExtResource("2_6tw57")
-
-[node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 2
+mouse_default_cursor_shape = 2

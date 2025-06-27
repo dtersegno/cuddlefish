@@ -15,20 +15,29 @@ var edge_blocks = []
 @onready var button = $Button
 
 @onready var spin_sound = $Sound/Spin
+signal spinning
 
-var bw_colors =  [
-	Color(0,0,0),
-	Color(1,1,1),
-	Color(0,0,0),
-	Color(1,1,1),
-	Color(0,0,0),
-	Color(1,1,1),
-	Color(0,0,0),
-	Color(1,1,1)
-]
+#var bw_colors =  [
+	#Color(0,0,0),
+	#Color(1,1,1),
+	#Color(0,0,0),
+	#Color(1,1,1),
+	#Color(0,0,0),
+	#Color(1,1,1),
+	#Color(0,0,0),
+	#Color(1,1,1)
+#]
 
 #squares labeled 0 thru 7 from right and xclockwise.
 # [0,5] means a line goes from Right square (0) to Lower Left square (5)
+
+var default_colors = [
+	'DARK_ORCHID',
+	'DARK_ORANGE',
+	'CORNFLOWER_BLUE',
+	'CHARTREUSE'
+]
+
 var color_to_index = {
 	'DARK_ORCHID':[0,5],
 	'DARK_ORANGE':[1,6],
@@ -76,6 +85,7 @@ func disable_button():
 	bton.disabled = true
 	return null
 
+#changes cuddle_colors list and actual colors of blocks
 func update_colors():
 	for color_name in color_to_index:
 		for index in color_to_index[color_name]:

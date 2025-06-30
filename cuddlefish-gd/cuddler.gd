@@ -87,13 +87,15 @@ func disable_button():
 
 #changes cuddle_colors list and actual colors of blocks
 func update_colors():
+	print('Updating colors on cube:')
+	#color_to_index: which squares have color color_to_index[name]?
 	for color_name in color_to_index:
 		for index in color_to_index[color_name]:
 			#change the list of colors
 			cuddle_colors[index] = Color(color_name)
 			#change the actual square color
 			edge_blocks[index].color = cuddle_colors[index]
-	lighten_block_colors()
+	#lighten_block_colors()
 	return null
 
 func rotate_45():

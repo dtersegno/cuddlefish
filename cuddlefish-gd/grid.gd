@@ -162,8 +162,9 @@ func compare_all_cuddlers():
 				[
 					square_pair,
 					cuddle_compare(
-						cuddleA,
+						cuddlerA,
 						cuddlerB,
+						comparison
 					)
 				]
 		)

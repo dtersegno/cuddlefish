@@ -11,7 +11,26 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	pass
+	if Input.is_action_just_pressed("ui_accept"):
+		print('debug: comparing all cuddlers')
+		var result = compare_all_cuddlers()
+		var all_cuddlers = get_tree().get_nodes_in_group('cuddlers')
+		for comparison in result:
+			print('------------')
+			print(comparison)
+			print(result[comparison])
+			for single_comparison in result[comparison]:
+				#if the comparison is true (the colors are the
+				#same), flash those cuddlers' squares.
+				if single_comparison[1]:
+					var cuddlerA = all_cuddlers[single_comparison[0][0]]
+					var cuddlerB = all_cuddlers[single_comparison[0][1]]
+					cuddlerA.flash_square(
+						comparisons[comparison][0]
+					)
+					cuddlerB.flash_square(
+						comparisons[comparison][1]
+					)
 
 func create_cuddlefish(number_to_create:int):
 	for new_cuddler_counter in range(number_to_create):
@@ -132,6 +151,30 @@ var compare_these_cuddlers_25 = {
 		[21, 22],
 		[22, 23],
 		[23, 24]
+	],
+	"EE_R":[
+		[4,9],
+		[9,14],
+		[14,19],
+		[19,24]
+	],
+	"EE_U":[
+		[0,1],
+		[1,2],
+		[2,3],
+		[3,4]
+	],
+	"EE_L":[
+		[0,5],
+		[5,10],
+		[10,15],
+		[15,20]
+	],
+	"EE_D":[
+		[20,21],
+		[21,22],
+		[22,23],
+		[23,24]
 	]
 }
 
@@ -148,32 +191,35 @@ func cuddle_compare(cuddler1, cuddler2, comparison):
 	return color1 == color2
 	
 func compare_all_cuddlers():
+	var all_cuddlers = get_tree().get_nodes_in_group('cuddlers')
 	var result = {}
 	for comparison in comparisons:
+		#prepare a report
 		var comparison_result = []
+		#get the color squares to compare
+		var square_pair = comparisons[comparison]
+		var square1 = square_pair[0]
+		var square2 = square_pair[1]
+		#get the cuddlers that will have these comparisons
 		var cuddlers_to_compare = compare_these_cuddlers_25[comparison]
+
 		for cuddler_pair in cuddlers_to_compare:
-			var cuddlerA = cuddler_pair[0]
-			var cuddlerB = cuddler_pair[1]
-			var square_pair = comparisons[comparison]
-			var square1 = square_pair[0]
-			var square2 = square_pair[1]
+			var cuddlerA = all_cuddlers[cuddler_pair[0]]
+			var cuddlerB = all_cuddlers[cuddler_pair[1]]
 			comparison_result.append(
 				[
-					square_pair,
+					[
+						cuddler_pair[0],
+						cuddler_pair[1]
+					],
 					cuddle_compare(
 						cuddlerA,
 						cuddlerB,
 						comparison
 					)
 				]
-		)
-
-func compare_all():
-	for cuddler1 in self.get_children():
-		for cuddler2 in self.get_children():
-			if cuddle_compare(cuddler1, cuddler2, "H"):
-				print(
-					"H compare true!"
-				)
-	return null
+			)
+		result.merge({comparison:comparison_result})
+		
+	return result
+	

@@ -191,3 +191,21 @@ func set_edge_block_colors(colors):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass
+
+func flash_square(square_no, flash_time = 1):
+	var this_edge_block = edge_blocks[square_no]
+	var flash_tween = create_tween()
+	var square_color = this_edge_block.color
+	flash_tween.tween_property(
+			this_edge_block,
+			"color",
+			Color(1,1,1,1),
+			flash_time/2
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_ELASTIC)
+	flash_tween.tween_property(
+		this_edge_block,
+		"color",
+		square_color,
+		flash_time
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+	return null

@@ -72,7 +72,6 @@ func initialize():
 		$GridContainer/D,
 		$GridContainer/DR
 	]
-	lighten_block_colors()
 	#set_edge_block_colors(cuddle_colors)
 	update_colors()
 
@@ -87,7 +86,7 @@ func disable_button():
 
 #changes cuddle_colors list and actual colors of blocks
 func update_colors():
-	print('Updating colors on cube:')
+	#print('Updating colors on cube:')
 	#color_to_index: which squares have color color_to_index[name]?
 	for color_name in color_to_index:
 		for index in color_to_index[color_name]:
@@ -95,7 +94,7 @@ func update_colors():
 			cuddle_colors[index] = Color(color_name)
 			#change the actual square color
 			edge_blocks[index].color = cuddle_colors[index]
-	#lighten_block_colors()
+	lighten_block_colors()
 	return null
 
 func rotate_45():
@@ -109,25 +108,30 @@ func rotate_45():
 	return null
 
 func rotate_90():
-	#duplicate self to spin for visual
-	spinning.emit()
 	var visual_square = self.duplicate()
 	visual_square.cuddle_colors = self.cuddle_colors
 	visual_square.color_to_index = self.color_to_index
 	visual_square.initialize()
 	visual_square.disable_button()
-	get_tree().root.add_child(visual_square)
+	visual_square.update_colors()
 	
 	#place the visual square over myself
 	visual_square.global_position = self.global_position
-	# "hide" self
-	self.modulate.a = 0
-	#rotate colors
+	get_tree().root.add_child(visual_square)
+	
+	# "hide" the real square
+	self.modulate.a = 0 
+	
+	
+	#rotate colors on the real square's color tracker.
 	for color_name in color_to_index:
 		var index_pair = color_to_index[color_name]
 		index_pair[0] = (index_pair[0] + 2)%8
 		index_pair[1] = (index_pair[1] + 2)%8
 		color_to_index[color_name] = index_pair
+	
+	
+	#change the real square's colors
 	update_colors()
 	
 	#emit a sound
@@ -137,10 +141,14 @@ func rotate_90():
 	
 	#wait for the spinning square to finish
 	await visual_square.spin(self)
+	
 	#"show" self
 	self.modulate.a = 1
+	visual_square.queue_free()
+	
 	#visual_square.queue_free()
 	button.release_focus()
+
 	return null
 	
 #animation for transient squares
@@ -151,12 +159,12 @@ func spin(creator_node):
 	self.pivot_offset = self.size / 2
 	#self.pivot_offset = get_size()
 	var spin_tween = create_tween()
-	var spin_time = .15
+	var spin_time = .12
 	spin_tween.tween_property(self,"rotation", -PI/2, spin_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	spin_tween.tween_callback(self.queue_free)
 	#spin_tween.tween_callback(creator_node.show)
 	await spin_tween.finished
-	return spin_tween.finished
+	return null
 
 
 
@@ -198,11 +206,12 @@ func flash_square(square_no, flash_time = 1):
 	var this_edge_block = edge_blocks[square_no]
 	var flash_tween = create_tween()
 	var square_color = this_edge_block.color
+	
 	flash_tween.tween_property(
-			this_edge_block,
-			"color",
-			Color(1,1,1,1),
-			flash_time/2
+		this_edge_block,
+		"color",
+		Color(1,1,1,1),
+		flash_time/10.
 	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_ELASTIC)
 	flash_tween.tween_property(
 		this_edge_block,
@@ -210,4 +219,9 @@ func flash_square(square_no, flash_time = 1):
 		square_color,
 		flash_time
 	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+	#be sure to update the colors because the square_color variable
+	#may no longer represent the color --- since it may have changed
+	#due to a rotation.
+	await flash_tween.finished
+	update_colors()
 	return null

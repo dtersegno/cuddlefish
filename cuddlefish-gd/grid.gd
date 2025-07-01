@@ -8,28 +8,37 @@ var cuddler = preload("res://cuddler.tscn")
 func _ready() -> void:
 	create_cuddlefish(25)
 	cuddler_prime.queue_free()
+	#for number in range(16):
+		#print(str(number) + '%8: ' + str(number%8))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
-		print('debug: comparing all cuddlers')
+		#print('debug: comparing all cuddlers')
 		var result = compare_all_cuddlers()
 		var all_cuddlers = get_tree().get_nodes_in_group('cuddlers')
 		for comparison in result:
-			print('------------')
-			print(comparison)
-			print(result[comparison])
 			for single_comparison in result[comparison]:
 				#if the comparison is true (the colors are the
 				#same), flash those cuddlers' squares.
 				if single_comparison[1]:
-					var cuddlerA = all_cuddlers[single_comparison[0][0]]
-					var cuddlerB = all_cuddlers[single_comparison[0][1]]
+					var cuddlerAindex = single_comparison[0][0]
+					var cuddlerBindex = single_comparison[0][1]
+					var cuddlerA = all_cuddlers[cuddlerAindex]
+					var cuddlerB = all_cuddlers[cuddlerBindex]
 					cuddlerA.flash_square(
 						comparisons[comparison][0]
 					)
 					cuddlerB.flash_square(
 						comparisons[comparison][1]
+					)
+					print(
+						'Cuddler '
+						+ str(cuddlerAindex)
+						+ ' '
+						+ comparison
+						+ ' Cuddler '
+						+ str(cuddlerBindex)
 					)
 
 func create_cuddlefish(number_to_create:int):
@@ -198,8 +207,8 @@ func compare_all_cuddlers():
 		var comparison_result = []
 		#get the color squares to compare
 		var square_pair = comparisons[comparison]
-		var square1 = square_pair[0]
-		var square2 = square_pair[1]
+		#var square1 = square_pair[0]
+		#var square2 = square_pair[1]
 		#get the cuddlers that will have these comparisons
 		var cuddlers_to_compare = compare_these_cuddlers_25[comparison]
 

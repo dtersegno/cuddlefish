@@ -117,11 +117,11 @@ func rotate_90():
 	
 	#place the visual square over myself
 	visual_square.global_position = self.global_position
-	get_tree().root.add_child(visual_square)
+	#get_tree().root.add_child(visual_square)
+	self.add_child(visual_square)
 	
 	# "hide" the real square
-	self.modulate.a = 0 
-	
+	self.self_modulate.a = 0
 	
 	#rotate colors on the real square's color tracker.
 	for color_name in color_to_index:
@@ -129,7 +129,6 @@ func rotate_90():
 		index_pair[0] = (index_pair[0] + 2)%8
 		index_pair[1] = (index_pair[1] + 2)%8
 		color_to_index[color_name] = index_pair
-	
 	
 	#change the real square's colors
 	update_colors()
@@ -164,6 +163,7 @@ func spin(creator_node):
 	spin_tween.tween_callback(self.queue_free)
 	#spin_tween.tween_callback(creator_node.show)
 	await spin_tween.finished
+	update_colors()
 	return null
 
 
@@ -217,7 +217,7 @@ func flash_square(square_no, flash_time = 1):
 		this_edge_block,
 		"color",
 		square_color,
-		flash_time
+		flash_time*2/3.
 	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
 	#be sure to update the colors because the square_color variable
 	#may no longer represent the color --- since it may have changed

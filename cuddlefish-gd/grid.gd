@@ -18,6 +18,8 @@ func _process(_delta: float) -> void:
 		var result = compare_all_cuddlers()
 		var all_cuddlers = get_tree().get_nodes_in_group('cuddlers')
 		for comparison in result:
+			# for each comparison type,
+			# get [ [cuddlerA, cuddlerB], true/false ]
 			for single_comparison in result[comparison]:
 				#if the comparison is true (the colors are the
 				#same), flash those cuddlers' squares.

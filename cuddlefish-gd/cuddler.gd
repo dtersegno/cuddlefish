@@ -117,11 +117,12 @@ func rotate_90():
 	
 	#place the visual square over myself
 	visual_square.global_position = self.global_position
-	#get_tree().root.add_child(visual_square)
-	self.add_child(visual_square)
+	get_tree().root.add_child(visual_square)
+	#self.add_child(visual_square)
 	
 	# "hide" the real square
-	self.self_modulate.a = 0
+	#print('hiding square')
+	self.modulate.a = 0
 	
 	#rotate colors on the real square's color tracker.
 	for color_name in color_to_index:
@@ -142,6 +143,8 @@ func rotate_90():
 	await visual_square.spin(self)
 	
 	#"show" self
+	
+	#print('showing square')
 	self.modulate.a = 1
 	visual_square.queue_free()
 	
@@ -159,12 +162,13 @@ func spin(creator_node):
 	#self.pivot_offset = get_size()
 	var spin_tween = create_tween()
 	var spin_time = .12
+	#var spin_time = 3
 	spin_tween.tween_property(self,"rotation", -PI/2, spin_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	spin_tween.tween_callback(self.queue_free)
 	#spin_tween.tween_callback(creator_node.show)
 	await spin_tween.finished
-	update_colors()
-	return null
+	#update_colors()
+	return spin_tween.finished
 
 
 

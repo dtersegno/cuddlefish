@@ -34,14 +34,14 @@ func _process(_delta: float) -> void:
 					cuddlerB.flash_square(
 						comparisons[comparison][1]
 					)
-					print(
-						'Cuddler '
-						+ str(cuddlerAindex)
-						+ ' '
-						+ comparison
-						+ ' Cuddler '
-						+ str(cuddlerBindex)
-					)
+					#print(
+						#'Cuddler '
+						#+ str(cuddlerAindex)
+						#+ ' '
+						#+ comparison
+						#+ ' Cuddler '
+						#+ str(cuddlerBindex)
+					#)
 
 func create_cuddlefish(number_to_create:int):
 	for new_cuddler_counter in range(number_to_create):
@@ -197,8 +197,15 @@ var compare_these_cuddlers_25 = {
 
 func cuddle_compare(cuddler1, cuddler2, comparison):
 	var square_indices = comparisons[comparison]
-	var color1 = cuddler1.edge_blocks[square_indices[0]].color
-	var color2 = cuddler2.edge_blocks[square_indices[1]].color
+	
+	#compare the actual assigned color
+	#var color1 = cuddler1.edge_blocks[square_indices[0]].color
+	#var color2 = cuddler2.edge_blocks[square_indices[1]].color
+	
+	#compare the record of the color
+	var color1 = cuddler1.cuddle_colors[square_indices[0]]
+	var color2 = cuddler2.cuddle_colors[square_indices[1]]
+	
 	return color1 == color2
 	
 func compare_all_cuddlers():

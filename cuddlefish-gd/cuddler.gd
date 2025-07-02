@@ -17,6 +17,8 @@ var edge_blocks = []
 @onready var spin_sound = $Sound/Spin
 signal spinning
 
+var cuddler_scene = preload("res://cuddler.tscn")
+
 #var bw_colors =  [
 	#Color(0,0,0),
 	#Color(1,1,1),
@@ -93,6 +95,10 @@ func update_colors():
 			#change the list of colors
 			cuddle_colors[index] = Color(color_name)
 			#change the actual square color
+			#print('edge blocks:')
+			#print(edge_blocks)
+			#print('cuddle colors:')
+			#print(cuddle_colors)
 			edge_blocks[index].color = cuddle_colors[index]
 	lighten_block_colors()
 	return null
@@ -108,10 +114,13 @@ func rotate_45():
 	return null
 
 func rotate_90():
-	var visual_square = self.duplicate()
-	visual_square.cuddle_colors = self.cuddle_colors
-	visual_square.color_to_index = self.color_to_index
+	var visual_square = cuddler_scene.instantiate()
+	#visual_square.set_script('res://cuddler.gd')
+	
 	visual_square.initialize()
+	visual_square.cuddle_colors = self.cuddle_colors.duplicate()
+	visual_square.color_to_index = self.color_to_index.duplicate()
+	visual_square.edge_blocks = self.edge_blocks.duplicate()
 	visual_square.disable_button()
 	visual_square.update_colors()
 	

@@ -21,7 +21,6 @@ layout_mode = 2
 columns = 3
 
 [node name="UL" type="ColorRect" parent="GridContainer"]
-custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -32,6 +31,7 @@ texture = ExtResource("3_b6jh8")
 centered = false
 
 [node name="Sprite2D2" type="Sprite2D" parent="GridContainer/UL"]
+visible = false
 modulate = Color(0, 0, 0, 1)
 scale = Vector2(13, 13)
 texture = ExtResource("3_b6jh8")
@@ -41,19 +41,16 @@ vframes = 6
 frame = 6
 
 [node name="U" type="ColorRect" parent="GridContainer"]
-custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="UR" type="ColorRect" parent="GridContainer"]
-custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="L" type="ColorRect" parent="GridContainer"]
-custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -69,7 +66,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="DL" type="ColorRect" parent="GridContainer"]
-custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

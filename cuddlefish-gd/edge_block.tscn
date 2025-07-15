@@ -1,0 +1,75 @@
+[gd_scene load_steps=3 format=3 uid="uid://vs4xpav104sl"]
+
+[ext_resource type="Script" path="res://edge_block.gd" id="1_6mlxm"]
+[ext_resource type="Texture2D" uid="uid://oy0j7qxjxwdu" path="res://sprites/pipes.png" id="2_dc1i7"]
+
+[node name="EdgeBlock" type="PanelContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_6mlxm")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+columns = 3
+
+[node name="UL" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="GridContainer/UL"]
+visible = false
+texture = ExtResource("2_dc1i7")
+centered = false
+
+[node name="Sprite2D2" type="Sprite2D" parent="GridContainer/UL"]
+visible = false
+modulate = Color(0, 0, 0, 1)
+scale = Vector2(13, 13)
+texture = ExtResource("2_dc1i7")
+centered = false
+hframes = 6
+vframes = 6
+frame = 6
+
+[node name="U" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="UR" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="L" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="C" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.535023, 0.535023, 0.535023, 1)
+
+[node name="R" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DL" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="D" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DR" type="ColorRect" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

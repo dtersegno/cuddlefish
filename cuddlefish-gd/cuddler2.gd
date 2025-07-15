@@ -1,54 +1,29 @@
+#### cuddler 2 rot
+
+
+
 extends PanelContainer
 
-#@onready var UL = $GridContainer/UL
-#@onready var U = $GridContainer/U
-#@onready var UR = $GridContainer/UR
-#@onready var L = $GridContainer/L
-#@onready var C = $GridContainer/C
-#@onready var R = $GridContainer/R
-#@onready var DL = $GridContainer/DL
-#@onready var D = $GridContainer/D
-#@onready var DR = $GridContainer/DR
-
-var edge_blocks = []
-
-@onready var button = $Button
 
 @onready var spin_sound = $Sound/Spin
 signal spinning
 
 var cuddler_scene = preload("res://cuddler.tscn")
 
-
-
-#var bw_colors =  [
-	#Color(0,0,0),
-	#Color(1,1,1),
-	#Color(0,0,0),
-	#Color(1,1,1),
-	#Color(0,0,0),
-	#Color(1,1,1),
-	#Color(0,0,0),
-	#Color(1,1,1)
-#]
-
 #squares labeled 0 thru 7 from right and xclockwise.
 # [0,5] means a line goes from Right square (0) to Lower Left square (5)
-
 var default_colors = [
 	'DARK_ORCHID',
 	'DARK_ORANGE',
 	'CORNFLOWER_BLUE',
 	'CHARTREUSE'
 ]
-
 var color_to_index = {
 	'DARK_ORCHID':[0,5],
 	'DARK_ORANGE':[1,6],
 	'CORNFLOWER_BLUE':[2,4],
 	'CHARTREUSE':[3,7]
 }
-
 var cuddle_colors = [
 	Color('DARK_ORCHID'),
 	Color('DARK_ORANGE'),
@@ -66,27 +41,16 @@ func _ready() -> void:
 	button.pressed.connect(self._on_button_pressed)
 
 func initialize():
-	edge_blocks = [
-		$GridContainer/R,
-		$GridContainer/UR,
-		$GridContainer/U,
-		$GridContainer/UL,
-		$GridContainer/L,
-		$GridContainer/DL,
-		$GridContainer/D,
-		$GridContainer/DR
-	]
-	#set_edge_block_colors(cuddle_colors)
+	button = $Button
 	update_colors()
 
 func _on_button_pressed():
 	rotate_90()
-	#lighten_block_colors()
+	return null
 
-# prevents pushing the button until 
+# prevents pushing the button until rotation animation is complete
 func disable_button():
-	var bton = get_child(-1)
-	bton.disabled = true
+	button.disabled = true
 	return null
 
 #changes cuddle_colors list and actual colors of blocks
@@ -105,25 +69,15 @@ func update_colors():
 			edge_blocks[index].color = cuddle_colors[index]
 	lighten_block_colors()
 	return null
-#
-#func rotate_45():
-	## update the color_to_index dictionary
-	#for color_name in color_to_index:
-		#var index_pair = color_to_index[color_name]
-		#index_pair[0] = (index_pair[0] + 1)%8
-		#index_pair[1] = (index_pair[1] + 1)%8
-		#color_to_index[color_name] = index_pair
-	#update_colors()
-	#return null
 
 func rotate_90():
 	var visual_square = cuddler_scene.instantiate()
 	#visual_square.set_script('res://cuddler.gd')
 	
 	visual_square.initialize()
-	visual_square.cuddle_colors = self.cuddle_colors.duplicate()
-	visual_square.color_to_index = self.color_to_index.duplicate()
-	visual_square.edge_blocks = self.edge_blocks.duplicate()
+	visual_square.cuddle_colors = self.cuddle_colors.duplicate(true)
+	visual_square.color_to_index = self.color_to_index.duplicate(true)
+	visual_square.edge_blocks = self.edge_blocks.duplicate(true)
 	visual_square.disable_button()
 	visual_square.update_colors()
 	
@@ -173,7 +127,7 @@ func spin(creator_node):
 	self.pivot_offset = self.size / 2
 	#self.pivot_offset = get_size()
 	var spin_tween = create_tween()
-	var spin_time = .12
+	var spin_time = 0.12
 	#var spin_time = 3
 	spin_tween.tween_property(self,"rotation", -PI/2, spin_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	spin_tween.tween_callback(self.queue_free)
@@ -208,10 +162,10 @@ func spin(creator_node):
 func lighten_block_colors():
 	for block in edge_blocks:
 		block.color = block.color.lightened(0.2)
-#
-#func set_edge_block_colors(colors):
-	#for index in range(len(edge_blocks)):
-		#edge_blocks[index].color = colors[index]
+
+func set_edge_block_colors(colors):
+	for index in range(len(edge_blocks)):
+		edge_blocks[index].color = colors[index]
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:

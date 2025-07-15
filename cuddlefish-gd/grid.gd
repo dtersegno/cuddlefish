@@ -3,10 +3,12 @@ extends GridContainer
 @onready var cuddler_prime = $Cuddler_Prime
 
 var cuddler = preload("res://cuddler.tscn")
+var edge_block = preload("res://edge_block.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	create_cuddlefish(25)
+	#create_cuddlefish(25)
+	create_cuddlerows(5,5)
 	cuddler_prime.queue_free()
 	#for number in range(16):
 		#print(str(number) + '%8: ' + str(number%8))
@@ -41,14 +43,32 @@ func _process(_delta: float) -> void:
 						#+ comparison
 						#+ ' Cuddler '
 						#+ str(cuddlerBindex)
-					#)
+					#x)
 
 func create_cuddlefish(number_to_create:int):
 	for new_cuddler_counter in range(number_to_create):
 		var new_cuddler = cuddler.instantiate()
 		self.add_child(new_cuddler)
 		new_cuddler.add_to_group('cuddlers')
-
+		
+#create all the cuddlefish along with edge blocks for a 7x7 grid.
+func create_cuddlerows(rows:int, cols:int):
+	#add cols+2 children for the top
+	create_edge_block(cols + 2, 3) #face down on top row
+	for row in range(rows):
+		create_edge_block(1, 0) #face right on the left
+		create_cuddlefish(cols)
+		create_edge_block(1, 2) # face left on the right
+	create_edge_block(cols + 2,1) #bottom row
+	return null
+	
+# create edge blocks with orientations 0, 1, 2, or 3	
+func create_edge_block(number_to_create:int, orientation:int):
+	for number in range(number_to_create):
+		var new_edge_block = edge_block.instantiate()
+		self.add_child(new_edge_block)
+	return null
+	
 # whether the colors at certain positions of
 #two cuddlers are the same
 

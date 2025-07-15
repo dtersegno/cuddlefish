@@ -1,40 +1,42 @@
 extends PanelContainer
 
-#@onready var UL = $GridContainer/UL
-#@onready var U = $GridContainer/U
-#@onready var UR = $GridContainer/UR
-#@onready var L = $GridContainer/L
-#@onready var C = $GridContainer/C
-#@onready var R = $GridContainer/R
-#@onready var DL = $GridContainer/DL
-#@onready var D = $GridContainer/D
-#@onready var DR = $GridContainer/DR
+@onready var UL = $GridContainer/UL
+@onready var U = $GridContainer/U
+@onready var UR = $GridContainer/UR
+@onready var L = $GridContainer/L
+@onready var C = $GridContainer/C
+@onready var R = $GridContainer/R
+@onready var DL = $GridContainer/DL
+@onready var D = $GridContainer/D
+@onready var DR = $GridContainer/DR
 
+#to describe which direction its pointing.
+enum DIRECTION {RIGHT, UP, LEFT, DOWN}
+var direction := DIRECTION.RIGHT
 var edge_blocks = []
+		#$GridContainer/R,
+		#$GridContainer/UR,
+		#$GridContainer/U,
+		#$GridContainer/UL,
+		#$GridContainer/L,
+		#$GridContainer/DL,
+		#$GridContainer/D,
+		#$GridContainer/DR
+	#]
 
+#spin button and behavior
 @onready var button = $Button
-
 @onready var spin_sound = $Sound/Spin
 signal spinning
+signal button_clicked
 
+#preloaded scene for copying self
 var cuddler_scene = preload("res://cuddler.tscn")
-
-
-
-#var bw_colors =  [
-	#Color(0,0,0),
-	#Color(1,1,1),
-	#Color(0,0,0),
-	#Color(1,1,1),
-	#Color(0,0,0),
-	#Color(1,1,1),
-	#Color(0,0,0),
-	#Color(1,1,1)
-#]
 
 #squares labeled 0 thru 7 from right and xclockwise.
 # [0,5] means a line goes from Right square (0) to Lower Left square (5)
 
+#just a list.
 var default_colors = [
 	'DARK_ORCHID',
 	'DARK_ORANGE',
@@ -42,6 +44,7 @@ var default_colors = [
 	'CHARTREUSE'
 ]
 
+#give me the local square indices of a given color
 var color_to_index = {
 	'DARK_ORCHID':[0,5],
 	'DARK_ORANGE':[1,6],
@@ -49,6 +52,7 @@ var color_to_index = {
 	'CHARTREUSE':[3,7]
 }
 
+#give me the color of square i
 var cuddle_colors = [
 	Color('DARK_ORCHID'),
 	Color('DARK_ORANGE'),
@@ -79,18 +83,32 @@ func initialize():
 	#set_edge_block_colors(cuddle_colors)
 	update_colors()
 
-func _on_button_pressed():
-	rotate_90()
-	#lighten_block_colors()
+func local_to_global(local_square_no:int) -> int:
+	return (local_square_no - direction*2)%8
+	
+func global_to_local(global_square_no:int) -> int:
+	return (global_square_no + direction*2)%8
+
+func get_color_of_square(square_no:int, local:bool):
+	if local:
+		return cuddle_colors[square_no]
+	else:
+		return get_color_of_square
+	
+func get_squares_of_color(color:Color, local:bool):
+	return color_to_index[color]
+
+func _on_button_pressed() -> void:
+	await rotate_90()
+	self.emit_signal("button_clicked")
 
 # prevents pushing the button until 
-func disable_button():
+func disable_button() -> void:
 	var bton = get_child(-1)
 	bton.disabled = true
-	return null
 
 #changes cuddle_colors list and actual colors of blocks
-func update_colors():
+func update_colors() -> void:
 	#print('Updating colors on cube:')
 	#color_to_index: which squares have color color_to_index[name]?
 	for color_name in color_to_index:
@@ -103,20 +121,10 @@ func update_colors():
 			#print('cuddle colors:')
 			#print(cuddle_colors)
 			edge_blocks[index].color = cuddle_colors[index]
-	lighten_block_colors()
-	return null
+	lighten_block_colors(0.2)
 #
-#func rotate_45():
-	## update the color_to_index dictionary
-	#for color_name in color_to_index:
-		#var index_pair = color_to_index[color_name]
-		#index_pair[0] = (index_pair[0] + 1)%8
-		#index_pair[1] = (index_pair[1] + 1)%8
-		#color_to_index[color_name] = index_pair
-	#update_colors()
-	#return null
 
-func rotate_90():
+func rotate_90() -> void:
 	var visual_square = cuddler_scene.instantiate()
 	#visual_square.set_script('res://cuddler.gd')
 	
@@ -155,15 +163,12 @@ func rotate_90():
 	await visual_square.spin(self)
 	
 	#"show" self
-	
 	#print('showing square')
 	self.modulate.a = 1
 	visual_square.queue_free()
 	
 	#visual_square.queue_free()
 	button.release_focus()
-
-	return null
 	
 #animation for transient squares
 func spin(creator_node):
@@ -184,30 +189,9 @@ func spin(creator_node):
 
 
 
-#func rotate_45():
-	#var first_block_color = edge_blocks[0].color
-	#for block_index in range(len(edge_blocks) - 1):
-		#var this_block = edge_blocks[block_index]
-		#var next_block = edge_blocks[block_index + 1]
-		#this_block.color = next_block.color
-	#edge_blocks[-1].color = first_block_color
-	#return null
-#
-#
-#func rotate_90():
-	#var first_block_color = edge_blocks[0].color
-	#var second_block_color = edge_blocks[1].color
-	#for block_index in range(len(edge_blocks) - 2):
-		#var this_block = edge_blocks[block_index]
-		#var next_block = edge_blocks[block_index + 2]
-		#this_block.color = next_block.color
-	#edge_blocks[-2].color = first_block_color
-	#edge_blocks[-1].color = second_block_color
-	#return null
-
-func lighten_block_colors():
+func lighten_block_colors(lightening):
 	for block in edge_blocks:
-		block.color = block.color.lightened(0.2)
+		block.color = block.color.lightened(lightening)
 #
 #func set_edge_block_colors(colors):
 	#for index in range(len(edge_blocks)):
@@ -220,7 +204,7 @@ func _process(_delta: float) -> void:
 func flash_square(square_no, flash_time = 1):
 	var this_edge_block = edge_blocks[square_no]
 	var flash_tween = create_tween()
-	var square_color = this_edge_block.color
+	var square_color = self.get_color_of_square(square_no, true).lightened(0.2)
 	
 	flash_tween.tween_property(
 		this_edge_block,

@@ -16,40 +16,15 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
-		#print('debug: comparing all cuddlers')
-		var result = compare_all_cuddlers()
-		var all_cuddlers = get_tree().get_nodes_in_group('cuddlers')
-		for comparison in result:
-			# for each comparison type,
-			# get [ [cuddlerA, cuddlerB], true/false ]
-			for single_comparison in result[comparison]:
-				#if the comparison is true (the colors are the
-				#same), flash those cuddlers' squares.
-				if single_comparison[1]:
-					var cuddlerAindex = single_comparison[0][0]
-					var cuddlerBindex = single_comparison[0][1]
-					var cuddlerA = all_cuddlers[cuddlerAindex]
-					var cuddlerB = all_cuddlers[cuddlerBindex]
-					cuddlerA.flash_square(
-						comparisons[comparison][0]
-					)
-					cuddlerB.flash_square(
-						comparisons[comparison][1]
-					)
-					#print(
-						#'Cuddler '
-						#+ str(cuddlerAindex)
-						#+ ' '
-						#+ comparison
-						#+ ' Cuddler '
-						#+ str(cuddlerBindex)
-					#x)
+		perform_cuddler_comparison()
+
 
 func create_cuddlefish(number_to_create:int):
 	for new_cuddler_counter in range(number_to_create):
 		var new_cuddler = cuddler.instantiate()
 		self.add_child(new_cuddler)
 		new_cuddler.add_to_group('cuddlers')
+		new_cuddler.button_clicked.connect(self.perform_cuddler_comparison)
 		
 #create all the cuddlefish along with edge blocks for a 7x7 grid.
 func create_cuddlerows(rows:int, cols:int):
@@ -214,6 +189,36 @@ var compare_these_cuddlers_25 = {
 #ex
 #cuddle_compare(<cuddler A>,<cuddler B>, "V")
 #compares cuddler A's square 6 to cuddler B's square 2.
+
+#compares all cuddlers and flashes squares as a result
+func perform_cuddler_comparison():
+	var result = compare_all_cuddlers()
+	var all_cuddlers = get_tree().get_nodes_in_group('cuddlers')
+	for comparison in result:
+		# for each comparison type,
+		# get [ [cuddlerA, cuddlerB], true/false ]
+		for single_comparison in result[comparison]:
+			#if the comparison is true (the colors are the
+			#same), flash those cuddlers' squares.
+			if single_comparison[1]:
+				var cuddlerAindex = single_comparison[0][0]
+				var cuddlerBindex = single_comparison[0][1]
+				var cuddlerA = all_cuddlers[cuddlerAindex]
+				var cuddlerB = all_cuddlers[cuddlerBindex]
+				cuddlerA.flash_square(
+					comparisons[comparison][0]
+				)
+				cuddlerB.flash_square(
+					comparisons[comparison][1]
+				)
+				#print(
+					#'Cuddler '
+					#+ str(cuddlerAindex)
+					#+ ' '
+					#+ comparison
+					#+ ' Cuddler '
+					#+ str(cuddlerBindex)
+				#x)
 
 func cuddle_compare(cuddler1, cuddler2, comparison):
 	var square_indices = comparisons[comparison]

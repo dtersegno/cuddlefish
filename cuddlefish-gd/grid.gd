@@ -42,6 +42,7 @@ func create_edge_block(number_to_create:int, orientation:int):
 	for number in range(number_to_create):
 		var new_edge_block = edge_block.instantiate()
 		self.add_child(new_edge_block)
+		new_edge_block.add_to_group('edge_blocks')
 	return null
 	
 # whether the colors at certain positions of
@@ -54,6 +55,7 @@ func create_edge_block(number_to_create:int, orientation:int):
 # and continue xclockwise to 7 at the Lower Right
 # comparison order is important.
 var comparisons = {
+	#comparisons between cuddlers
 	"V":[6,2], #top to bottom
 	"H":[0,4], #right to left
 	"D1":[7,3], #lower right to upper left
@@ -160,28 +162,71 @@ var compare_these_cuddlers_25 = {
 	],
 	"EE_R":[
 		[4,9],
-		[9,14],
-		[14,19],
+		#[9,14],
+		#[14,19],
 		[19,24]
 	],
 	"EE_U":[
 		[0,1],
-		[1,2],
-		[2,3],
+		#[1,2],
+		#[2,3],
 		[3,4]
 	],
 	"EE_L":[
 		[0,5],
-		[5,10],
-		[10,15],
+		#[5,10],
+		#[10,15],
 		[15,20]
 	],
 	"EE_D":[
 		[20,21],
-		[21,22],
-		[22,23],
+		#[21,22],
+		#[22,23],
 		[23,24]
 	]
+}
+
+#label edge blocks: 
+# top row 0 - 6
+# 7, 8
+# 9, 10,
+# 11, 12,
+# 13, 14,
+# 15, 16
+# 17 - 23
+# edge blocks 1, 2 link the cuddlers below via their center-edge squares
+# and their shared corners.
+# so, if the EE_U (edge cuddler, edge square, upper) comparison between
+# cuddlers 0 and 1 is true, these blocks should light up.
+# likewise, if the EC_U comparison is true, those should light.
+# give the comparison type, receive a list of squares that undergo
+# that comparison, and the edge block that cares about it.
+var edge_block_comparisons = {
+	"EC_R":[],
+	"EC_U":[
+		[
+			[0,1], #cuddler nos
+			[1,2] #edge block nos
+		],
+		[
+			[1,2],
+			[2,3]
+		],
+		[
+			[2,3],
+			[3,4]
+		],
+		[
+			[3,4],
+			[4,5]
+		]
+	],
+	"EC_L":[],
+	"EC_D":[],
+	"EE_R":[],
+	"EE_U":[],
+	"EE_L":[],
+	"EE_D":[]
 }
 
 #take two squares and a type of comparison.
@@ -220,6 +265,7 @@ func perform_cuddler_comparison():
 					#+ str(cuddlerBindex)
 				#x)
 
+# a single comparison between two cuddlers
 func cuddle_compare(cuddler1, cuddler2, comparison):
 	var square_indices = comparisons[comparison]
 	
@@ -233,6 +279,22 @@ func cuddle_compare(cuddler1, cuddler2, comparison):
 	
 	return color1 == color2
 	
+# using all comparison types, compares all cuddlers registered
+# for each type.
+# returns a dictionary like:
+# result = {
+#    "comparison type 1":[
+#		[
+#			[cuddlerA, cuddlerB], 
+#			true
+#		],
+#		[
+#			[cuddlerB, cuddlerD],
+#			false
+#		],...
+#	],
+#	"comparison type 2": ...
+#}
 func compare_all_cuddlers():
 	var all_cuddlers = get_tree().get_nodes_in_group('cuddlers')
 	var result = {}

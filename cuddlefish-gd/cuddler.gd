@@ -102,7 +102,7 @@ func _on_button_pressed() -> void:
 	await rotate_90()
 	self.emit_signal("button_clicked")
 
-# prevents pushing the button until 
+# prevents pushing the button
 func disable_button() -> void:
 	var bton = get_child(-1)
 	bton.disabled = true

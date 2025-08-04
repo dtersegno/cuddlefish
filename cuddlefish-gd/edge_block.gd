@@ -1,6 +1,7 @@
 extends PanelContainer
 
-var edge_blocks = []
+var edge_blocks = [] #will be filled in in initialize in
+@onready var c_block = $GridContainer/C
 
 #squares labeled 0 thru 7 from right and xclockwise.
 # [0,5] means a line goes from Right square (0) to Lower Left square (5)
@@ -75,6 +76,13 @@ func lighten_block_colors():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass
+
+func color_square(square_no, color):
+	#colors squares 0 - 7 for edges or -1 for center
+	if square_no == -1:
+		c_block.color = color
+	else:
+		color_to_index
 
 func flash_square(square_no, flash_time = 1):
 	var this_edge_block = edge_blocks[square_no]

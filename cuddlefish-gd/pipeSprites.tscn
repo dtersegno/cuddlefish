@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://dsb2sucmb4ea6"]
+
+[ext_resource type="Texture2D" uid="uid://de2o7odyw4ml" path="res://sprites/vpipes.png" id="1_fk26u"]
+[ext_resource type="Script" path="res://pipe_sprites.gd" id="2_6gghq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wxc7r"]
+atlas = ExtResource("1_fk26u")
+
+[node name="VPipe" type="Sprite2D"]
+texture = SubResource("AtlasTexture_wxc7r")
+centered = false
+hframes = 6
+script = ExtResource("2_6gghq")
+type = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+centered = false

@@ -107,6 +107,11 @@ func disable_button() -> void:
 	var bton = get_child(-1)
 	bton.disabled = true
 
+# enables the button
+func enable_button() -> void:
+	var bton = get_child(-1)
+	bton.disabled = false
+
 #changes cuddle_colors list and actual colors of blocks
 func update_colors() -> void:
 	#print('Updating colors on cube:')
@@ -221,6 +226,5 @@ func flash_square(square_no, flash_time = 1):
 	#be sure to update the colors because the square_color variable
 	#may no longer represent the color --- since it may have changed
 	#due to a rotation.
-	await flash_tween.finished
-	update_colors()
+	flash_tween.tween_callback(enable_button)
 	return null

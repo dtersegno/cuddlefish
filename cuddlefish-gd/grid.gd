@@ -5,9 +5,13 @@ extends GridContainer
 var cuddler = preload("res://cuddler.tscn")
 var edge_block = preload("res://edge_block.tscn")
 
+#visual reference for cuddlegrid
+@onready var cuddlegrid_sprite = $CuddlegridNos
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	#create_cuddlefish(25)
+	# remove the sprite 
+	cuddlegrid_sprite.queue_free()
 	create_cuddlerows(5,5)
 	cuddler_prime.queue_free()
 	#for number in range(16):
@@ -202,15 +206,32 @@ var compare_these_cuddlers_25 = {
 # give the comparison type, receive a list of squares that undergo
 # that comparison, and the edge block that cares about it.
 var edge_block_comparisons = {
-	"EC_R":[],
-	"EC_U":[
+	"EC_R":[
 		[
-			[0,1], #cuddler nos
-			[1,2] #edge block nos
+			[4,9],
+			[8,10]
 		],
 		[
-			[1,2],
-			[2,3]
+			[9,14],
+			[10,12]
+		],
+		[
+			[14,19],
+			[12,14]
+		],
+		[
+			[19,24],
+			[14,16]
+		]
+	],
+	"EC_U":[
+		[
+			[0,1], # if these cuddlers pass the EC_U check...
+			[1,2] # ...light up these edge blocks.
+		],
+		[
+			[1,2], #cuddler nos
+			[2,3]  #edge block nos
 		],
 		[
 			[2,3],
@@ -221,12 +242,82 @@ var edge_block_comparisons = {
 			[4,5]
 		]
 	],
-	"EC_L":[],
-	"EC_D":[],
-	"EE_R":[],
-	"EE_U":[],
-	"EE_L":[],
-	"EE_D":[]
+	"EC_L":[
+		[
+			[0,5],
+			[7,9]
+		],
+		[
+			[5,10],
+			[9,11]
+		],
+		[
+			[10,15],
+			[11,13]
+		],
+		[
+			[15,20],
+			[13,15]
+		]
+	],
+	"EC_D":[
+		[
+			[20,21],
+			[18,19]
+		],
+		[
+			[21,22],
+			[19,20]
+		],
+		[
+			[22,23],
+			[20,21]
+		],
+		[
+			[23,24],
+			[21,22]
+		]
+	],
+	"EE_R":[
+		[
+			[4,9],
+			[8,10]
+		],
+		[
+			[19,24],
+			[14,16]
+		]
+	],
+	"EE_U":[
+		[
+			[0,1],
+			[1,2]
+		],
+		[
+			[3,4],
+			[4,5]
+		]
+	],
+	"EE_L":[
+		[
+			[0,5],
+			[7,9]
+		],
+		[
+			[15,20],
+			[13,15]
+		]
+	],
+	"EE_D":[
+		[
+			[20,21],
+			[18,19]
+		],
+		[
+			[23,24],
+			[21,22]
+		]
+	]
 }
 
 #take two squares and a type of comparison.
@@ -235,7 +326,8 @@ var edge_block_comparisons = {
 #cuddle_compare(<cuddler A>,<cuddler B>, "V")
 #compares cuddler A's square 6 to cuddler B's square 2.
 
-#compares all cuddlers and flashes squares as a result
+# compares all cuddlers and flashes squares as a result
+# locks rotation until flashing is done.
 func perform_cuddler_comparison():
 	var result = compare_all_cuddlers()
 	var all_cuddlers = get_tree().get_nodes_in_group('cuddlers')
@@ -250,6 +342,8 @@ func perform_cuddler_comparison():
 				var cuddlerBindex = single_comparison[0][1]
 				var cuddlerA = all_cuddlers[cuddlerAindex]
 				var cuddlerB = all_cuddlers[cuddlerBindex]
+				cuddlerA.disable_button()
+				cuddlerB.disable_button()
 				cuddlerA.flash_square(
 					comparisons[comparison][0]
 				)

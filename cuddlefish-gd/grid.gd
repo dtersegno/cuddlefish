@@ -1,9 +1,99 @@
 extends GridContainer
 
+
+#store the colors of each square for each cuddler number in the solution.
+#should be used to set up the puzzle as well
+var solution_coloring = {
+	'blue': {
+		0: [0, 6],
+		1: [4, 0],
+		2: [4, 5],
+		6: [1, 6],
+		11: [2, 1],
+		7: [5, 6],
+		12: [2, 1],
+		8: [5, 2],
+		3: [6, 0],
+		4: [4, 6],
+		9: [2, 5],
+		13: [1, 0],
+		14: [4, 6],
+		19: [2, 6],
+		24: [2, 3],
+		18: [7, 6],
+		23: [2, 4],
+		22: [0, 2],
+		17: [6, 5],
+		21: [1, 4],
+		20: [0, 1],
+		16: [5, 4],
+		15: [0, 2],
+		10: [6, 2],
+		5: [6, 2]},
+	'purple': {
+		0: [6, 0],
+		1: [4, 6],
+		6: [2, 5],
+		10: [1, 6],
+		15: [2, 6],
+		20: [2, 0],
+		21: [4, 2],
+		16: [6, 1],
+		12: [5, 7],
+		18: [3, 5],
+		22: [1, 0],
+		23: [4, 0],
+		24: [4, 2],
+		19: [6, 2],
+		14: [6, 2],
+		9: [6, 4],
+		8: [0, 1],
+		4: [5, 4],
+		3: [4, 0],
+		2: [0, 6],
+		7: [2, 7],
+		13: [3, 5],
+		17: [1, 3],
+		11: [7, 3],
+		5: [7, 2]},
+	'green': {
+		0: [7, 0],
+		1: [4, 5],
+		5: [1, 6],
+		10: [2, 0],
+		11: [4, 5],
+		15: [1, 6],
+		20: [2, 0],
+		21: [4, 0],
+		22: [4, 3],
+		16: [7, 0],
+		17: [4, 2],
+		12: [6, 0],
+		13: [4, 7],
+		19: [3, 5],
+		23: [1, 0],
+		24: [4, 3],
+		18: [7, 1],
+		14: [5, 2],
+		9: [6, 2],
+		4: [6, 4],
+		3: [4, 0],
+		2: [0, 7],
+		8: [3, 4],
+		7: [4, 0],
+		6: [0, 3]
+	}
+}
+
 @onready var cuddler_prime = $Cuddler_Prime
 
 var cuddler = preload("res://cuddler.tscn")
 var edge_block = preload("res://edge_block.tscn")
+
+#to be filled on creation. Cuddlers and edge blocks are also added to groups, but
+#group orders are not guaranteed.
+var cuddlers = []
+var edge_blocks = []
 
 #visual reference for cuddlegrid
 @onready var cuddlegrid_sprite = $CuddlegridNos
@@ -28,6 +118,7 @@ func create_cuddlefish(number_to_create:int):
 		var new_cuddler = cuddler.instantiate()
 		self.add_child(new_cuddler)
 		new_cuddler.add_to_group('cuddlers')
+		cuddlers.append(new_cuddler)
 		new_cuddler.button_clicked.connect(self.perform_cuddler_comparison)
 		
 #create all the cuddlefish along with edge blocks for a 7x7 grid.
@@ -47,6 +138,7 @@ func create_edge_block(number_to_create:int, orientation:int):
 		var new_edge_block = edge_block.instantiate()
 		self.add_child(new_edge_block)
 		new_edge_block.add_to_group('edge_blocks')
+		edge_blocks.append(new_edge_block)
 	return null
 	
 # whether the colors at certain positions of

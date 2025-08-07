@@ -149,12 +149,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("ui_accept"):
-		perform_cuddler_comparison()
-	if Input.is_action_just_pressed("ui_down"):
-		get_tree().call_group('cuddlers','random_spin')
-	if Input.is_action_just_pressed("ui_up"):
-		check_cuddler_directions()
+	pass
 
 #cuddlers are created with the solution at direction 0
 func check_cuddler_directions():
@@ -196,6 +191,7 @@ func create_edge_block(number_to_create:int, orientation:int):
 		new_edge_block.add_to_group('edge_blocks')
 		edge_blocks.append(new_edge_block)
 	return null
+	
 
 #a dict of colors
 var default_colors = {

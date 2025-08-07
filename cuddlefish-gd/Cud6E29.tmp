@@ -1,0 +1,130 @@
+[gd_scene load_steps=5 format=3 uid="uid://csro2nic42h36"]
+
+[ext_resource type="Script" path="res://grid.gd" id="1_5w3ed"]
+[ext_resource type="Script" path="res://game.gd" id="1_lsvof"]
+[ext_resource type="PackedScene" uid="uid://ddml7s4viwma8" path="res://cuddler.tscn" id="2_3n4av"]
+[ext_resource type="Texture2D" uid="uid://blgbg8uwtudy5" path="res://sprites/cuddlegrid_nos.png" id="3_diwuv"]
+
+[node name="Cuddlefish" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lsvof")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+text = "Cuddlefish"
+fit_content = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="Grid" type="GridContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 7
+script = ExtResource("1_5w3ed")
+
+[node name="Cuddler_Prime" parent="VBoxContainer/HBoxContainer/Grid" instance=ExtResource("2_3n4av")]
+layout_mode = 2
+
+[node name="CuddlegridNos" type="Sprite2D" parent="VBoxContainer/HBoxContainer/Grid"]
+visible = false
+position = Vector2(441, 431.5)
+scale = Vector2(1.1225, 1.09625)
+texture = ExtResource("3_diwuv")
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="RandomizeButton" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(128, 64)
+layout_mode = 2
+focus_mode = 0
+text = "Randomize"
+
+[node name="Reset" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(128, 64)
+layout_mode = 2
+focus_mode = 0
+text = "Reset"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/PanelContainer"]
+visible = false
+layout_mode = 2
+
+[node name="H Button" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "H"
+
+[node name="V Button" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "V"
+
+[node name="D1 Button" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "D1"
+
+[node name="D2 Button" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "D2"
+
+[node name="EC R" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EC R"
+
+[node name="EC U" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EC U"
+
+[node name="EC L" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EC L"
+
+[node name="EC D" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EC D"
+
+[node name="EE R" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EE R"
+
+[node name="EE U" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EE U"
+
+[node name="EE L" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EE L"
+
+[node name="EE D" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "EE D"

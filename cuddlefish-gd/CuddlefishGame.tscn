@@ -71,6 +71,18 @@ layout_mode = 2
 focus_mode = 0
 text = "Randomize"
 
+[node name="Reset" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(128, 64)
+layout_mode = 2
+focus_mode = 0
+text = "Reset"
+
+[node name="Check" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(128, 64)
+layout_mode = 2
+focus_mode = 0
+text = "Check"
+
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/PanelContainer"]
 visible = false
 layout_mode = 2

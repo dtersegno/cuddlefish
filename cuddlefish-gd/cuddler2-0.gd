@@ -202,6 +202,14 @@ func random_spin(spin_time = 1):
 	self.enable_button()
 	self.size = Vector2(128,128)
 	
+func turn_to_direction(new_direction = DIRECTION.RIGHT, time = 0.5) -> void:
+	disable_button()
+	var spin_tween = create_tween()
+	
+	spin_tween.tween_property(self, "rotation", direction*PI/2, time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
+	direction = new_direction
+	await spin_tween.finished
+	enable_button()
 
 #flashes global (by default) square
 func flash_square(square_no, local = false, flash_time = 1):

@@ -96,11 +96,14 @@ func get_color_of_square(square_no:int, local:bool):
 		return get_color_of_square
 	
 func get_squares_of_color(color:Color, local:bool):
-	return color_to_index[color]
+	if local:
+		return color_to_index[color]
+	else:
+		return 
 
 func _on_button_pressed() -> void:
-	await rotate_90()
 	self.emit_signal("button_clicked")
+	await rotate_90()
 
 # prevents pushing the button
 func disable_button() -> void:
@@ -112,7 +115,8 @@ func enable_button() -> void:
 	var bton = get_child(-1)
 	bton.disabled = false
 
-#changes cuddle_colors list and actual colors of blocks
+#changes cuddle_colors list based on rotation. This is the global color scheme
+#
 func update_colors() -> void:
 	#print('Updating colors on cube:')
 	#color_to_index: which squares have color color_to_index[name]?

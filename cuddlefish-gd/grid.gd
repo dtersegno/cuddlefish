@@ -85,9 +85,43 @@ var solution_coloring = {
 	}
 }
 
+var swap_plan_p = {
+	0:[5,1],
+	1:[3,6],
+	10:[1,5],
+	15:[3,5],
+	20:[3,7],
+	21:[5,2],
+	22:[7,1],
+	23:[0,5],
+	24:[4,1],
+	19:[7,1],
+	14:[7,2],
+	4:[5,3],
+	3:[1,4],
+	5:[7,3]
+}
+var swap_plan_g = {
+	0:[2,7],
+	1:[2,5],
+	5:[1,5],
+	10:[3,0],
+	15:[1,4],
+	20:[6,4],
+	21:[0,6],
+	24:[3,6],
+	23:[6,1],
+	14:[1,5],
+	9:[1,7],
+	4:[7,2],
+	3:[2,3],
+	2:[2,7]
+}
+
+
 @onready var cuddler_prime = $Cuddler_Prime
 
-var cuddler = preload("res://cuddler.tscn")
+var cuddler = preload("res://cuddler2-0.tscn")
 var edge_block = preload("res://edge_block.tscn")
 
 #to be filled on creation. Cuddlers and edge blocks are also added to groups, but
@@ -106,13 +140,33 @@ func _ready() -> void:
 	cuddler_prime.queue_free()
 	#for number in range(16):
 		#print(str(number) + '%8: ' + str(number%8))
+		
+	#adjust the default "solution" to include different numbers for parallel edges
+	solution_coloring['green'].merge(swap_plan_g, true)
+	solution_coloring['purple'].merge(swap_plan_p, true)
+		
+	self.paint_solution()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		perform_cuddler_comparison()
+	if Input.is_action_just_pressed("ui_down"):
+		get_tree().call_group('cuddlers','random_spin')
+	if Input.is_action_just_pressed("ui_up"):
+		check_cuddler_directions()
 
-
+#cuddlers are created with the solution at direction 0
+func check_cuddler_directions():
+	#are all the cuddlers checked so far pointing to the right / direction 0.
+	var all_right = true
+	for cuddler in cuddlers:
+		all_right = all_right and (0 == cuddler.direction)
+	if all_right:
+		print("that's the solution!")
+	else:
+		print("not correct")
+		
 func create_cuddlefish(number_to_create:int):
 	for new_cuddler_counter in range(number_to_create):
 		var new_cuddler = cuddler.instantiate()
@@ -131,8 +185,10 @@ func create_cuddlerows(rows:int, cols:int):
 		create_edge_block(1, 2) # face left on the right
 	create_edge_block(cols + 2,1) #bottom row
 	return null
-	
-# create edge blocks with orientations 0, 1, 2, or 3	
+
+# create edge blocks with orientations 0, 1, 2, or 3
+# these are different than the squares within a cuddlefish.
+# sorry for using the same name, sorry. sorry..
 func create_edge_block(number_to_create:int, orientation:int):
 	for number in range(number_to_create):
 		var new_edge_block = edge_block.instantiate()
@@ -140,6 +196,30 @@ func create_edge_block(number_to_create:int, orientation:int):
 		new_edge_block.add_to_group('edge_blocks')
 		edge_blocks.append(new_edge_block)
 	return null
+
+#a dict of colors
+var default_colors = {
+	'purple':Color('DARK_ORCHID'),
+	'orange':Color('DARK_ORANGE'),
+	'blue':Color('CORNFLOWER_BLUE'),
+	'green':Color('CHARTREUSE'),
+	'gray':Color('GRAY'),
+	'white':Color('WHITE')
+}
+
+func paint_all_squares(color):
+	get_tree().call_group('cuddlers','paint_cuddle_colors')
+
+func paint_solution() -> void:
+	for color in solution_coloring:
+		for cuddler_index in range(len(cuddlers)):
+			var color_these_squares = solution_coloring[color][cuddler_index]
+			var this_cuddler = cuddlers[cuddler_index]
+			for square in color_these_squares:
+				this_cuddler.paint_single_square(square, default_colors[color])
+				this_cuddler.cuddle_colors[square] = default_colors[color]
+	
+		
 	
 # whether the colors at certain positions of
 #two cuddlers are the same
@@ -420,7 +500,7 @@ var edge_block_comparisons = {
 
 # compares all cuddlers and flashes squares as a result
 # locks rotation until flashing is done.
-func perform_cuddler_comparison():
+func perform_cuddler_comparison() -> void:
 	var result = compare_all_cuddlers()
 	var all_cuddlers = get_tree().get_nodes_in_group('cuddlers')
 	for comparison in result:
@@ -452,7 +532,7 @@ func perform_cuddler_comparison():
 				#x)
 
 # a single comparison between two cuddlers
-func cuddle_compare(cuddler1, cuddler2, comparison):
+func cuddle_compare(cuddler1, cuddler2, comparison) -> bool:
 	var square_indices = comparisons[comparison]
 	
 	#compare the actual assigned color
@@ -460,8 +540,8 @@ func cuddle_compare(cuddler1, cuddler2, comparison):
 	#var color2 = cuddler2.edge_blocks[square_indices[1]].color
 	
 	#compare the record of the color
-	var color1 = cuddler1.cuddle_colors[square_indices[0]]
-	var color2 = cuddler2.cuddle_colors[square_indices[1]]
+	var color1 = cuddler1.get_color_of_square(square_indices[0], false)
+	var color2 = cuddler2.get_color_of_square(square_indices[1], false)
 	
 	return color1 == color2
 	
@@ -481,6 +561,9 @@ func cuddle_compare(cuddler1, cuddler2, comparison):
 #	],
 #	"comparison type 2": ...
 #}
+
+#performs the comparisons amongst all cuddlers and returns
+#a dict with bools of outcomes. Used by perform_cuddler_comparison()
 func compare_all_cuddlers():
 	var all_cuddlers = get_tree().get_nodes_in_group('cuddlers')
 	var result = {}

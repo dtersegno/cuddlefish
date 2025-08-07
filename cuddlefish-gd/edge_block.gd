@@ -82,7 +82,7 @@ func color_square(square_no, color):
 	if square_no == -1:
 		c_block.color = color
 	else:
-		color_to_index
+		cuddle_colors[square_no] = color
 
 func flash_square(square_no, flash_time = 1):
 	var this_edge_block = edge_blocks[square_no]

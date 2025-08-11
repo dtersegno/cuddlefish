@@ -52,7 +52,6 @@ script = ExtResource("1_5w3ed")
 layout_mode = 2
 
 [node name="CuddlegridNos" type="Sprite2D" parent="VBoxContainer/HBoxContainer/Grid"]
-visible = false
 position = Vector2(441, 431.5)
 scale = Vector2(1.1225, 1.09625)
 texture = ExtResource("3_diwuv")

@@ -197,11 +197,11 @@ func spin(creator_node):
 	return spin_tween.finished
 
 #
-func turn_to_direction(direction = DIRECTION.RIGHT, time = 0.5) -> void:
+func turn_to_direction(new_direction = DIRECTION.RIGHT, time = 0.5) -> void:
 	disable_button()
 	var spin_tween = create_tween()
 	
-	spin_tween.tween_property(self, "rotation", direction*PI/2, time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
+	spin_tween.tween_property(self, "rotation", new_direction*PI/2, time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
 	
 	await spin_tween.finished
 	enable_button()

@@ -6,6 +6,8 @@
 
 [node name="Cuddler" type="PanelContainer"]
 custom_minimum_size = Vector2(128, 128)
+offset_right = 128.0
+offset_bottom = 128.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_e0lkw")

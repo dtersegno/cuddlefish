@@ -189,8 +189,9 @@ func random_spin(spin_time = 1):
 	var spin_count = randi()%16
 	var new_direction = spin_count%4
 	
-	if fmod(self.rotation + spin_count*PI/2,2*PI) < 1e-2:
+	if fmod(self.rotation + new_direction*PI/2,2*PI) < 1e-1:
 		spin_count += 1
+		new_direction = spin_count%4
 	
 	var spin_time_extra = randf()
 	spin_tween.tween_property(self, "rotation", spin_count*PI/2, spin_time + spin_time_extra).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
@@ -206,7 +207,7 @@ func turn_to_direction(new_direction = DIRECTION.RIGHT, time = 0.5) -> void:
 	disable_button()
 	var spin_tween = create_tween()
 	
-	spin_tween.tween_property(self, "rotation", direction*PI/2, time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
+	spin_tween.tween_property(self, "rotation", new_direction*PI/2, time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
 	direction = new_direction
 	await spin_tween.finished
 	enable_button()

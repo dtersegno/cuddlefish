@@ -1,6 +1,26 @@
 extends GridContainer
 
 
+
+
+@onready var cuddler_prime = $Cuddler_Prime
+
+var cuddler = preload("res://cuddler2-0.tscn")
+var edge_block = preload("res://edge_block.tscn")
+
+#to be filled on creation. Cuddlers and edge blocks are also added to groups, but
+#group orders are not guaranteed.
+var cuddlers = []
+var edge_blocks = []
+
+#visual reference for cuddlegrid
+@onready var cuddlegrid_sprite = $CuddlegridNos
+
+###############################################################################
+#### Constants and solution ####
+################################
+
+
 #store the colors of each square for each cuddler number in the solution.
 #should be used to set up the puzzle as well
 var solution_coloring = {
@@ -119,79 +139,6 @@ var swap_plan_g = {
 }
 
 
-@onready var cuddler_prime = $Cuddler_Prime
-
-var cuddler = preload("res://cuddler2-0.tscn")
-var edge_block = preload("res://edge_block.tscn")
-
-#to be filled on creation. Cuddlers and edge blocks are also added to groups, but
-#group orders are not guaranteed.
-var cuddlers = []
-var edge_blocks = []
-
-#visual reference for cuddlegrid
-@onready var cuddlegrid_sprite = $CuddlegridNos
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	# remove the sprite 
-	cuddlegrid_sprite.queue_free()
-	create_cuddlerows(5,5)
-	cuddler_prime.queue_free()
-	#for number in range(16):
-		#print(str(number) + '%8: ' + str(number%8))
-		
-	#adjust the default "solution" to include different numbers for parallel edges
-	solution_coloring['green'].merge(swap_plan_g, true)
-	solution_coloring['purple'].merge(swap_plan_p, true)
-		
-	self.paint_solution()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
-
-#cuddlers are created with the solution at direction 0
-func check_cuddler_directions():
-	#are all the cuddlers checked so far pointing to the right / direction 0.
-	var all_right = true
-	for cuddler in cuddlers:
-		all_right = all_right and (0 == cuddler.direction)
-	if all_right:
-		print("that's the solution!")
-	else:
-		print("not correct")
-		
-func create_cuddlefish(number_to_create:int):
-	for new_cuddler_counter in range(number_to_create):
-		var new_cuddler = cuddler.instantiate()
-		self.add_child(new_cuddler)
-		new_cuddler.add_to_group('cuddlers')
-		cuddlers.append(new_cuddler)
-		new_cuddler.button_clicked.connect(self.perform_cuddler_comparison)
-		
-#create all the cuddlefish along with edge blocks for a 7x7 grid.
-func create_cuddlerows(rows:int, cols:int):
-	#add cols+2 children for the top
-	create_edge_block(cols + 2, 3) #face down on top row
-	for row in range(rows):
-		create_edge_block(1, 0) #face right on the left
-		create_cuddlefish(cols)
-		create_edge_block(1, 2) # face left on the right
-	create_edge_block(cols + 2,1) #bottom row
-	return null
-
-# create edge blocks with orientations 0, 1, 2, or 3
-# these are different than the squares within a cuddlefish.
-# sorry for using the same name, sorry. sorry..
-func create_edge_block(number_to_create:int, orientation:int):
-	for number in range(number_to_create):
-		var new_edge_block = edge_block.instantiate()
-		self.add_child(new_edge_block)
-		new_edge_block.add_to_group('edge_blocks')
-		edge_blocks.append(new_edge_block)
-	return null
-	
 
 #a dict of colors
 var default_colors = {
@@ -203,31 +150,17 @@ var default_colors = {
 	'white':Color('WHITE')
 }
 
-func paint_all_squares(color):
-	get_tree().call_group('cuddlers','paint_cuddle_colors')
-
-func paint_solution() -> void:
-	for color in solution_coloring:
-		for cuddler_index in range(len(cuddlers)):
-			var color_these_squares = solution_coloring[color][cuddler_index]
-			var this_cuddler = cuddlers[cuddler_index]
-			for square in color_these_squares:
-				this_cuddler.paint_single_square(square, default_colors[color])
-				this_cuddler.cuddle_colors[square] = default_colors[color]
-	
-		
-	
 # whether the colors at certain positions of
 #two cuddlers are the same
 
 # mark which internal squares to compare.
-#ex V: [6,2] compares the bottom of the first cuddler
-#to the top of the second.
+#ex V: [6,2] compares the bottom (6) of the first cuddler
+#to the top (2) of the second.
 # squares start at 0 at Right, 1 at Upper Right,
 # and continue xclockwise to 7 at the Lower Right
 # comparison order is important.
 var comparisons = {
-	#comparisons between cuddlers
+	#comparisons between cuddlers. 
 	"V":[6,2], #top to bottom
 	"H":[0,4], #right to left
 	"D1":[7,3], #lower right to upper left
@@ -488,6 +421,235 @@ var edge_block_comparisons = {
 	]
 }
 
+
+# edge_picker and edge_painting provide instructions for how to color 
+# edge blocks when their adjacent cuddlers match
+var edge_picker = {
+	"U":[
+		[
+			[0,1], #if these cuddlers compare true,
+			[1,2],# get these edge blocks and light them according to the dict "edge painting". The order of edges matters!
+		],
+		[
+			[1,2],
+			[2,3]
+		],
+		[
+			[2,3],
+			[3,4]
+		],
+		[
+			[3,4],
+			[4,5]
+		]
+	],
+	"R":[
+			[
+				[4,9], #if these cuddlers compare true,
+				[8,10],# get these edge blocks and light them according to the dict "edge painting". The order of edges matters!
+			],
+			[
+				[9,14],
+				[10,12]
+			],
+			[
+				[14,19],
+				[12,14]
+			],
+			[
+				[19,24],
+				[14,16]
+			]
+	],
+	"D":[
+			[
+				[20,21], #if these cuddlers compare true,
+				[18,19],# get these edge blocks and light them according to the dict "edge painting". The order of edges matters!
+			],
+			[
+				[21,22],
+				[19,20]
+			],
+			[
+				[22,23],
+				[20,21]
+			],
+			[
+				[23,24],
+				[21,22]
+			]
+	],
+	"L":[
+			[
+				[0,5], #if these cuddlers compare true,
+				[7,9],# get these edge blocks and light them according to the dict "edge painting". The order of edges matters!
+			],
+			[
+				[5,10],
+				[9,11]
+			],
+			[
+				[10,15],
+				[11,13]
+			],
+			[
+				[15,20],
+				[13,15]
+			]
+	],
+}
+
+var edge_painting = {
+	"EE_U":[
+		[6, -1, 0], #paint these squares in edge block 1
+		[4, -1, 6] #paint these squares in edge block 2
+	],
+	"EC_U":[
+		[7],
+		[5]
+	],
+	"EE_R":[
+		[4, -1, 6],
+		[2, -1, 4]
+	],
+	"EC_R":[
+		[7],
+		[1]
+	],
+	"EE_D":[
+		[2, -1, 0],
+		[2, -1, 4]
+	],
+	"EC_D":[
+		[1],
+		[3]
+	],
+	"EE_L":[
+		[0, -1, 6],
+		[2, -1, 0]
+	],
+	"EC_L":[
+		[1],
+		[7]
+	]
+}
+
+
+###############################################################################
+#### Operation ####
+###################
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	# remove the sprite 
+	cuddlegrid_sprite.queue_free()
+	create_cuddlerows(5,5)
+	cuddler_prime.queue_free()
+	#for number in range(16):
+		#print(str(number) + '%8: ' + str(number%8))
+		
+	#adjust the default "solution" to include different numbers for parallel edges
+	solution_coloring['green'].merge(swap_plan_g, true)
+	solution_coloring['purple'].merge(swap_plan_p, true)
+		
+	self.paint_solution()
+	self.paint_edge_blocks('gray')
+	
+	# test: tone edge blocks purple
+	#for edge_block in edge_blocks:
+		#for square in range(8):
+			#edge_block.tween_square_color(square, self.default_colors['purple'], 5)
+	
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta: float) -> void:
+	pass
+
+###############################################################################
+#### Creation and setup ####
+#######################################
+
+
+func create_cuddlefish(number_to_create:int):
+	for new_cuddler_counter in range(number_to_create):
+		var new_cuddler = cuddler.instantiate()
+		self.add_child(new_cuddler)
+		new_cuddler.add_to_group('cuddlers')
+		cuddlers.append(new_cuddler)
+		new_cuddler.button_clicked.connect(self.perform_cuddler_comparison)
+		
+#create all the cuddlefish along with edge blocks for a 7x7 grid.
+func create_cuddlerows(rows:int, cols:int):
+	#add cols+2 children for the top
+	create_edge_block(cols + 2, 3) #face down on top row
+	for row in range(rows):
+		create_edge_block(1, 0) #face right on the left
+		create_cuddlefish(cols)
+		create_edge_block(1, 2) # face left on the right
+	create_edge_block(cols + 2,1) #bottom row
+	return null
+	
+	
+
+# create edge blocks with orientations 0, 1, 2, or 3
+# these are different than the squares within a cuddlefish.
+# sorry for using the same name, sorry. sorry..
+func create_edge_block(number_to_create:int, orientation:int):
+	for number in range(number_to_create):
+		var new_edge_block = edge_block.instantiate()
+		self.add_child(new_edge_block)
+		new_edge_block.add_to_group('edge_blocks')
+		edge_blocks.append(new_edge_block)
+	return null
+	
+##############################################################################
+#### Painting ####
+##################
+
+func paint_edge_block(block_no, square_no, color):
+	var this_block = edge_blocks[block_no]
+	this_block.paint_single_square(square_no, color)
+
+func paint_edge_blocks(color):
+	for this_block in edge_blocks:
+		for square_no in range(8):
+			this_block.paint_single_square(square_no, color)
+			
+func paint_all_squares(color):
+	get_tree().call_group('cuddlers','paint_cuddle_colors')
+
+func paint_solution() -> void:
+	for color in solution_coloring:
+		for cuddler_index in range(len(cuddlers)):
+			var color_these_squares = solution_coloring[color][cuddler_index]
+			var this_cuddler = cuddlers[cuddler_index]
+			for square in color_these_squares:
+				this_cuddler.paint_single_square(square, default_colors[color])
+				this_cuddler.cuddle_colors[square] = default_colors[color]
+	
+	
+
+##############################################################################
+#### Alignment and solution checking ####
+#########################################
+
+#cuddlers are created with the solution at direction 0. This allows
+#to bypass actual color comparisons to check for solution.
+# The game alerts a win with a different mechanism than it uses to check if 
+# colors are properly aligned!
+func check_cuddler_directions():
+	#are all the cuddlers checked so far pointing to the right / direction 0.
+	var all_right = true
+	for cuddler in cuddlers:
+		all_right = all_right and (0 == cuddler.direction)
+	if all_right:
+		print("that's the solution!")
+	else:
+		print("not correct")
+		
+
+
 #take two squares and a type of comparison.
 #return the result of the comparison.
 #ex
@@ -505,27 +667,27 @@ func perform_cuddler_comparison() -> void:
 		for single_comparison in result[comparison]:
 			#if the comparison is true (the colors are the
 			#same), flash those cuddlers' squares.
-			if single_comparison[1]:
-				var cuddlerAindex = single_comparison[0][0]
-				var cuddlerBindex = single_comparison[0][1]
-				var cuddlerA = all_cuddlers[cuddlerAindex]
-				var cuddlerB = all_cuddlers[cuddlerBindex]
-				cuddlerA.disable_button()
-				cuddlerB.disable_button()
-				cuddlerA.flash_square(
-					comparisons[comparison][0]
-				)
-				cuddlerB.flash_square(
-					comparisons[comparison][1]
-				)
-				#print(
-					#'Cuddler '
-					#+ str(cuddlerAindex)
-					#+ ' '
-					#+ comparison
-					#+ ' Cuddler '
-					#+ str(cuddlerBindex)
-				#x)
+			#if single_comparison[1]:
+			var cuddlerAindex = single_comparison[0][0]
+			var cuddlerBindex = single_comparison[0][1]
+			var cuddlerA = all_cuddlers[cuddlerAindex]
+			var cuddlerB = all_cuddlers[cuddlerBindex]
+			cuddlerA.disable_button()
+			cuddlerB.disable_button()
+			cuddlerA.flash_square(
+				comparisons[comparison][0]
+			)
+			cuddlerB.flash_square(
+				comparisons[comparison][1]
+			)
+			#print(
+				#'Cuddler '
+				#+ str(cuddlerAindex)
+				#+ ' '
+				#+ comparison
+				#+ ' Cuddler '
+				#+ str(cuddlerBindex)
+			#x)
 
 # a single comparison between two cuddlers
 func cuddle_compare(cuddler1, cuddler2, comparison) -> bool:
@@ -591,5 +753,6 @@ func compare_all_cuddlers():
 			)
 		result.merge({comparison:comparison_result})
 		
+	print(result)
 	return result
 	

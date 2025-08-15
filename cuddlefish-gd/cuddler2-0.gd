@@ -39,7 +39,7 @@ var edge_blocks = []
 #clicking the button makes the square spin
 @onready var button = $Button
 @onready var spin_sound = $Sound/Spin
-signal spinning
+signal done_single_spinning
 signal button_clicked
 
 #preloaded scene for copying self.
@@ -115,6 +115,7 @@ func get_squares_of_color(color:Color):
 func _on_button_pressed() -> void:
 	self.emit_signal("button_clicked")
 	await rotate_90()
+	self.emit_signal('done_single_spinning')
 
 # prevents pushing the button
 func disable_button() -> void:
@@ -166,6 +167,7 @@ func rotate_90() -> void:
 	
 	direction = (direction + 1)%4 #advance the cardinal direction counterclockwise
 	await self.spin()
+	
 	self.enable_button()
 	self.size = Vector2(128,128)
 	

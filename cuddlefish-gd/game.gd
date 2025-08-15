@@ -20,6 +20,7 @@ func handle_input():
 		get_tree().call_group('cuddlers','random_spin')
 	if Input.is_action_just_pressed("ui_up"):
 		grid.check_cuddler_directions()
+		self.check_win()
 		
 func make_connections():
 	randomize_button.pressed.connect(random_spin_all_cuddlers)
@@ -34,11 +35,15 @@ func check_win():
 func random_spin_all_cuddlers() -> void:
 	var tree = get_tree()
 	tree.call_group('cuddlers','random_spin')
+	await get_tree().create_timer(1).timeout
+	grid.perform_cuddler_comparison()
 	
 func reset_all_cuddlers():
 	print("Resetting cuddlers")
 	var tree = get_tree()
 	tree.call_group('cuddlers','turn_to_direction')
+	await get_tree().create_timer(1).timeout
+	grid.perform_cuddler_comparison()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

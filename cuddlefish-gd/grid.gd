@@ -661,33 +661,45 @@ func check_cuddler_directions():
 func perform_cuddler_comparison() -> void:
 	var result = compare_all_cuddlers()
 	var all_cuddlers = get_tree().get_nodes_in_group('cuddlers')
+	print(result)
 	for comparison in result:
 		# for each comparison type,
 		# get [ [cuddlerA, cuddlerB], true/false ]
 		for single_comparison in result[comparison]:
 			#if the comparison is true (the colors are the
 			#same), flash those cuddlers' squares.
-			#if single_comparison[1]:
-			var cuddlerAindex = single_comparison[0][0]
-			var cuddlerBindex = single_comparison[0][1]
-			var cuddlerA = all_cuddlers[cuddlerAindex]
-			var cuddlerB = all_cuddlers[cuddlerBindex]
-			cuddlerA.disable_button()
-			cuddlerB.disable_button()
-			cuddlerA.flash_square(
-				comparisons[comparison][0]
-			)
-			cuddlerB.flash_square(
-				comparisons[comparison][1]
-			)
-			#print(
-				#'Cuddler '
-				#+ str(cuddlerAindex)
-				#+ ' '
-				#+ comparison
-				#+ ' Cuddler '
-				#+ str(cuddlerBindex)
-			#x)
+			if single_comparison[1]:
+				var cuddlerAindex = single_comparison[0][0]
+				var cuddlerBindex = single_comparison[0][1]
+				var cuddlerA = all_cuddlers[cuddlerAindex]
+				var cuddlerB = all_cuddlers[cuddlerBindex]
+				cuddlerA.disable_button()
+				cuddlerB.disable_button()
+				cuddlerA.flash_square(
+					comparisons[comparison][0]
+				)
+				cuddlerB.flash_square(
+					comparisons[comparison][1]
+				)
+				
+				######## work on this part
+				#light up the appropriate edge blocks
+				if 'EE_' + comparison in edge_picker.keys() or 'EC_' + comparison in edge_picker.keys():
+					var these_blocks = edge_picker[comparison]
+					for square_group in these_blocks:
+						if cuddlerA in square_group[0] and cuddlerB in square_group[0]:
+							var edge_a_index = square_group[1][0]
+							var edge_b_index = square_group[1][1]
+							var squares_a = edge_painting[comparison][0]
+							var squares_b = edge_painting[comparison][1]
+							var edge_a = edge_blocks[edge_a_index]
+							var edge_b = edge_blocks[edge_b_index]
+							for square_a in squares_a:
+								var this_color = cuddlerA.edge_blocks[square_a].color
+								edge_a.tween_square_color(square_a, this_color)
+							for square_b in squares_b:
+								var this_color = cuddlerB.edge_blocks[square_b].color
+								edge_b.tween_square_color(square_b, this_color)
 
 # a single comparison between two cuddlers
 func cuddle_compare(cuddler1, cuddler2, comparison) -> bool:
@@ -752,7 +764,6 @@ func compare_all_cuddlers():
 				]
 			)
 		result.merge({comparison:comparison_result})
-		
-	print(result)
+	
 	return result
 	

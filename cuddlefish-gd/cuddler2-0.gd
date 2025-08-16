@@ -169,7 +169,7 @@ func rotate_90() -> void:
 	await self.spin()
 	
 	self.enable_button()
-	self.size = Vector2(128,128)
+	#self.size = Vector2(128,128)
 	
 #animation for transient squares
 func spin(spin_time = 0.12):
@@ -183,12 +183,17 @@ func spin(spin_time = 0.12):
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
+	update_center_text()
 	pass
+
+func update_center_text():
+	var center_text_box = $GridContainer/C/TextEdit
+	center_text_box.text = str(self.direction) + '-->'
 
 func random_spin(spin_time = 1):
 	var spin_tween = create_tween()
 	#pick a number of times to spin 90 deg and a new direction
-	var spin_count = randi()%16
+	var spin_count = randi()%16-8
 	var new_direction = spin_count%4
 	
 	if fmod(self.rotation + new_direction*PI/2,2*PI) < 1e-1:

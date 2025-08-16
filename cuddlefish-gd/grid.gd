@@ -160,8 +160,8 @@ var default_colors = {
 # and continue xclockwise to 7 at the Lower Right
 # comparison order is important.
 var comparisons = {
-	#comparisons between cuddlers. 
-	"V":[6,2], #top to bottom
+	#comparisons between cuddlers. First cuddler's square, second cuddler's square.
+	"V":[6,2], #bottom to top
 	"H":[0,4], #right to left
 	"D1":[7,3], #lower right to upper left
 	"D2":[5,1], #lower left to upper right
@@ -306,122 +306,122 @@ var compare_these_cuddlers_25 = {
 # likewise, if the EC_U comparison is true, those should light.
 # give the comparison type, receive a list of squares that undergo
 # that comparison, and the edge block that cares about it.
-var edge_block_comparisons = {
-	"EC_R":[
-		[
-			[4,9],
-			[8,10]
-		],
-		[
-			[9,14],
-			[10,12]
-		],
-		[
-			[14,19],
-			[12,14]
-		],
-		[
-			[19,24],
-			[14,16]
-		]
-	],
-	"EC_U":[
-		[
-			[0,1], # if these cuddlers pass the EC_U check...
-			[1,2] # ...light up these edge blocks.
-		],
-		[
-			[1,2], #cuddler nos
-			[2,3]  #edge block nos
-		],
-		[
-			[2,3],
-			[3,4]
-		],
-		[
-			[3,4],
-			[4,5]
-		]
-	],
-	"EC_L":[
-		[
-			[0,5],
-			[7,9]
-		],
-		[
-			[5,10],
-			[9,11]
-		],
-		[
-			[10,15],
-			[11,13]
-		],
-		[
-			[15,20],
-			[13,15]
-		]
-	],
-	"EC_D":[
-		[
-			[20,21],
-			[18,19]
-		],
-		[
-			[21,22],
-			[19,20]
-		],
-		[
-			[22,23],
-			[20,21]
-		],
-		[
-			[23,24],
-			[21,22]
-		]
-	],
-	"EE_R":[
-		[
-			[4,9],
-			[8,10]
-		],
-		[
-			[19,24],
-			[14,16]
-		]
-	],
-	"EE_U":[
-		[
-			[0,1],
-			[1,2]
-		],
-		[
-			[3,4],
-			[4,5]
-		]
-	],
-	"EE_L":[
-		[
-			[0,5],
-			[7,9]
-		],
-		[
-			[15,20],
-			[13,15]
-		]
-	],
-	"EE_D":[
-		[
-			[20,21],
-			[18,19]
-		],
-		[
-			[23,24],
-			[21,22]
-		]
-	]
-}
+#var edge_block_comparisons = {
+	#"EC_R":[
+		#[
+			#[4,9],
+			#[8,10]
+		#],
+		#[
+			#[9,14],
+			#[10,12]
+		#],
+		#[
+			#[14,19],
+			#[12,14]
+		#],
+		#[
+			#[19,24],
+			#[14,16]
+		#]
+	#],
+	#"EC_U":[
+		#[
+			#[0,1], # if these cuddlers pass the EC_U check...
+			#[1,2] # ...light up these edge blocks.
+		#],
+		#[
+			#[1,2], #cuddler nos
+			#[2,3]  #edge block nos
+		#],
+		#[
+			#[2,3],
+			#[3,4]
+		#],
+		#[
+			#[3,4],
+			#[4,5]
+		#]
+	#],
+	#"EC_L":[
+		#[
+			#[0,5],
+			#[7,9]
+		#],
+		#[
+			#[5,10],
+			#[9,11]
+		#],
+		#[
+			#[10,15],
+			#[11,13]
+		#],
+		#[
+			#[15,20],
+			#[13,15]
+		#]
+	#],
+	#"EC_D":[
+		#[
+			#[20,21],
+			#[18,19]
+		#],
+		#[
+			#[21,22],
+			#[19,20]
+		#],
+		#[
+			#[22,23],
+			#[20,21]
+		#],
+		#[
+			#[23,24],
+			#[21,22]
+		#]
+	#],
+	#"EE_R":[
+		#[
+			#[4,9],
+			#[8,10]
+		#],
+		#[
+			#[19,24],
+			#[14,16]
+		#]
+	#],
+	#"EE_U":[
+		#[
+			#[0,1],
+			#[1,2]
+		#],
+		#[
+			#[3,4],
+			#[4,5]
+		#]
+	#],
+	#"EE_L":[
+		#[
+			#[0,5],
+			#[7,9]
+		#],
+		#[
+			#[15,20],
+			#[13,15]
+		#]
+	#],
+	#"EE_D":[
+		#[
+			#[20,21],
+			#[18,19]
+		#],
+		#[
+			#[23,24],
+			#[21,22]
+		#]
+	#]
+#}
 
-
+# edge picker is the same as edge_block_comparisons
 # edge_picker and edge_painting provide instructions for how to color 
 # edge blocks when their adjacent cuddlers match
 var edge_picker = {
@@ -696,15 +696,14 @@ func perform_cuddler_comparison() -> void:
 					comparisons[comparison][1]
 				)
 				
-			######## work on this part
 			#light up the appropriate edge blocks.
 			#go through all the blocks to compare
 			if comparison in edge_picker:
 				var these_blocks = edge_picker[comparison]
 				for square_group in these_blocks:
 					#square groups are shaped like [[CA,CB],[EA,EB]],
-					# with a list of cuddlers to compare and the matching edge
-					#blocks to update.
+					# with a list of cuddlers C to compare and the matching edge
+					#blocks E to update.
 					
 					
 					if cuddlerAindex in square_group[0] and cuddlerBindex in square_group[0]: #if the cuddlers in question are to be compared,
@@ -714,14 +713,13 @@ func perform_cuddler_comparison() -> void:
 						var squares_b = edge_painting[comparison][1]
 						var edge_a = edge_blocks[edge_a_index] #get the actual edge blocks
 						var edge_b = edge_blocks[edge_b_index]
-						var this_color = cuddlerA.edge_blocks[
+						var this_color = cuddlerA.get_color_of_square(
 							cuddlerA.global_to_local(
 								comparisons[comparison][0]
-								)
-							].color
-						if this_color == default_colors['white']:
-							this_color = default_colors['gray']
-						if not single_comparison[1]:
+								),
+								true
+							)
+						if this_color == default_colors['white'] or not single_comparison[1]:
 							this_color = default_colors['gray']
 						for square_a in squares_a:
 							for edge_square in edge_painting[comparison][0]:

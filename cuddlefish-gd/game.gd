@@ -14,13 +14,17 @@ func _ready() -> void:
 	make_connections()
 
 func handle_input():
+	if Input.is_action_pressed("ui_accept"):
+		check_button.button_pressed = true
 	if Input.is_action_just_pressed("ui_accept"):
 		grid.perform_cuddler_comparison()
 	if Input.is_action_just_pressed("ui_down"):
-		get_tree().call_group('cuddlers','random_spin')
+		self.random_spin_all_cuddlers()
 	if Input.is_action_just_pressed("ui_up"):
 		grid.check_cuddler_directions()
 		self.check_win()
+	if Input.is_action_just_pressed("ui_left"):
+		self.reset_all_cuddlers()
 		
 func make_connections():
 	randomize_button.pressed.connect(random_spin_all_cuddlers)

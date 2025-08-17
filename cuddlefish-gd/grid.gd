@@ -713,12 +713,19 @@ func perform_cuddler_comparison() -> void:
 						var squares_b = edge_painting[comparison][1]
 						var edge_a = edge_blocks[edge_a_index] #get the actual edge blocks
 						var edge_b = edge_blocks[edge_b_index]
+						#var this_color = cuddlerA.get_color_of_square(
+							#cuddlerA.global_to_local(
+								#comparisons[comparison][0]
+								#),
+								#true
+							#)
 						var this_color = cuddlerA.get_color_of_square(
 							cuddlerA.global_to_local(
 								comparisons[comparison][0]
 								),
 								true
 							)
+						
 						if this_color == default_colors['white'] or not single_comparison[1]:
 							this_color = default_colors['gray']
 						for square_a in squares_a:

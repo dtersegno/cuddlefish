@@ -93,10 +93,10 @@ func initialize():
 	]
 
 func local_to_global(local_square_no:int) -> int:
-	return (local_square_no - direction*2)%8
+	return (local_square_no + direction*2)%8
 	
 func global_to_local(global_square_no:int) -> int:
-	return (global_square_no + direction*2)%8
+	return (global_square_no - direction*2)%8
 
 #grid will use this to read the color of a cuddler's square
 func get_color_of_square(square_no:int, local:bool):
@@ -166,7 +166,12 @@ func rotate_90() -> void:
 	spin_sound.play()
 	
 	direction = (direction + 1)%4 #advance the cardinal direction counterclockwise
+	
 	await self.spin()
+	
+	self.rotation = fmod(self.rotation, 2*PI)
+	if self.rotation < 0:
+		self.rotation = self.rotation + 2*PI
 	
 	self.enable_button()
 	#self.size = Vector2(128,128)
@@ -194,17 +199,24 @@ func random_spin(spin_time = 1):
 	var spin_tween = create_tween()
 	#pick a number of times to spin 90 deg and a new direction
 	var spin_count = randi()%16-8
-	var new_direction = spin_count%4
+	var new_direction = spin_count%4 #amazingly gives negatives
 	
-	if fmod(self.rotation + new_direction*PI/2,2*PI) < 1e-1:
+	if new_direction < 0:
+		new_direction = new_direction + 4
+	
+	if fmod(self.rotation - new_direction*PI/2,2*PI) < 1e-1:
 		spin_count += 1
 		new_direction = spin_count%4
 	
+	if new_direction < 0:
+		new_direction = new_direction + 4
+	
 	var spin_time_extra = randf()
-	spin_tween.tween_property(self, "rotation", spin_count*PI/2, spin_time + spin_time_extra).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
+	spin_tween.tween_property(self, "rotation", -spin_count*PI/2, spin_time + spin_time_extra).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
 	
 	self.disable_button()
 	direction = new_direction
+	self.rotation = fmod(self.rotation, 2*PI)
 	
 	await spin_tween.finished
 	self.enable_button()

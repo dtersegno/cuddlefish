@@ -64,6 +64,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="TextEdit" type="TextEdit" parent="GridContainer/C"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -78,6 +79,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="TextEdit" type="TextEdit" parent="GridContainer/R"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

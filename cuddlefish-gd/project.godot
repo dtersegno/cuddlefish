@@ -25,4 +25,4 @@ window/stretch/scale_mode="integer"
 [rendering]
 
 renderer/rendering_method="mobile"
-environment/defaults/default_clear_color=Color(0.395427, 0.318641, 0.909519, 1)
+environment/defaults/default_clear_color=Color(0.693182, 0.702359, 0.985997, 1)

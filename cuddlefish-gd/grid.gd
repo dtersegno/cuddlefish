@@ -16,6 +16,8 @@ var edge_blocks = []
 #visual reference for cuddlegrid
 @onready var cuddlegrid_sprite = $CuddlegridNos
 
+
+signal winstate
 ###############################################################################
 #### Constants and solution ####
 ################################
@@ -589,7 +591,7 @@ func create_cuddlefish(number_to_create:int):
 		self.add_child(new_cuddler)
 		new_cuddler.add_to_group('cuddlers')
 		cuddlers.append(new_cuddler)
-		new_cuddler.button_clicked.connect(self.perform_cuddler_comparison)
+		#new_cuddler.button_clicked.connect(self.perform_cuddler_comparison)
 		
 #create all the cuddlefish along with edge blocks for a 7x7 grid.
 func create_cuddlerows(rows:int, cols:int):
@@ -655,10 +657,7 @@ func check_cuddler_directions():
 	var all_right = true
 	for cuddler in cuddlers:
 		all_right = all_right and (0 == cuddler.direction)
-	if all_right:
-		print("that's the solution!")
-	else:
-		print("not correct")
+	return all_right
 		
 
 
@@ -734,6 +733,9 @@ func perform_cuddler_comparison() -> void:
 						for square_b in squares_b:
 							for edge_square in edge_painting[comparison][1]:
 								edge_b.tween_square_color(edge_square, this_color)
+								
+	if check_cuddler_directions():
+		emit_signal("winstate")
 
 # a single comparison between two cuddlers
 func cuddle_compare(cuddler1, cuddler2, comparison) -> bool:

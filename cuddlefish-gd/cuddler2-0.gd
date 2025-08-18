@@ -11,6 +11,12 @@ extends PanelContainer
 @onready var DR = $GridContainer/DR
 
 
+#sprite
+@onready var pupil = $GridContainer/C/Pupil
+var pupil_center = Vector2(20,20)
+var looking = false
+
+
 # Direction enum to describe which direction the cuddler is pointing.
 #default is RIGHT: square 0 is in the cuddler direction from center.
 #useful for converting local square numbers to global
@@ -40,7 +46,7 @@ var edge_blocks = []
 @onready var button = $Button
 @onready var spin_sound = $Sound/Spin
 signal done_single_spinning
-signal button_clicked
+#signal button_clicked
 
 #preloaded scene for copying self.
 #will be unused in final game --- cuddler 2 will itself rotate rather
@@ -113,8 +119,8 @@ func get_squares_of_color(color:Color):
 	return color_to_index[color]
 
 func _on_button_pressed() -> void:
-	self.emit_signal("button_clicked")
 	await rotate_90()
+	self.emit_signal("button_clicked")
 	self.emit_signal('done_single_spinning')
 
 # prevents pushing the button
@@ -188,7 +194,12 @@ func spin(spin_time = 0.12):
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	update_center_text()
+	#update_center_text()
+	if randf() < 0.0001 and not looking:
+		var look_distance = randi()%24
+		var look_time = 0.25*randf()+0.1
+		var wait_time = 5*randf()+1
+		self.animate_pupil(look_distance, look_time, wait_time)
 	pass
 
 func update_center_text():
@@ -260,3 +271,14 @@ func flash_square(square_no, local = false, flash_time = 1):
 	#may no longer represent the color --- since it may have changed
 	#due to a rotation.
 	return null
+
+func animate_pupil(distance = 16, move_time = 0.2, wait_time = 5):
+	looking = true
+	var zero_location = pupil.position
+	var look_direction = distance*Vector2(1,0).rotated(2*PI/(1+abs(randi())%8))
+	var move_tween = create_tween()
+	move_tween.tween_property(pupil, "position", zero_location + look_direction, move_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART)
+	move_tween.tween_property(pupil, "position", zero_location+ look_direction, wait_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART)
+	move_tween.tween_property(pupil, "position", zero_location, move_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART)
+	await move_tween.finished
+	looking = false

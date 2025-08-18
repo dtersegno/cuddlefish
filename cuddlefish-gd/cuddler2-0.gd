@@ -120,7 +120,7 @@ func get_squares_of_color(color:Color):
 
 func _on_button_pressed() -> void:
 	await rotate_90()
-	self.emit_signal("button_clicked")
+	#self.emit_signal("button_clicked")
 	self.emit_signal('done_single_spinning')
 
 # prevents pushing the button
@@ -130,6 +130,9 @@ func disable_button() -> void:
 # enables the button
 func enable_button() -> void:
 	button.disabled = false
+#
+#func _on_hover():
+	#self.rotation = self.rotation + 0
 
 #give a list in order of local squares 0 thru 7 of Colors
 func set_cuddle_colors(color_list) -> void:
@@ -194,7 +197,15 @@ func spin(spin_time = 0.12):
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
+	
 	#update_center_text()
+	#
+	if button.is_hovered():
+		self.modulate = Color(0.9,0.9,0.9,1)
+		print('hovor')
+	else:
+		self.modulate = Color(1,1,1,1)
+		
 	if randf() < 0.0001 and not looking:
 		var look_distance = randi()%24
 		var look_time = 0.25*randf()+0.1

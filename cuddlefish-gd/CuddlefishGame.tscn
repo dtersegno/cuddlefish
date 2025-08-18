@@ -1,10 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://csro2nic42h36"]
+[gd_scene load_steps=7 format=3 uid="uid://csro2nic42h36"]
 
 [ext_resource type="Script" path="res://grid.gd" id="1_5w3ed"]
 [ext_resource type="Script" path="res://game.gd" id="1_lsvof"]
 [ext_resource type="PackedScene" uid="uid://ddml7s4viwma8" path="res://cuddler.tscn" id="2_3n4av"]
 [ext_resource type="Texture2D" uid="uid://blgbg8uwtudy5" path="res://sprites/cuddlegrid_nos.png" id="3_diwuv"]
 [ext_resource type="StyleBox" uid="uid://d1wxsbjir1u1" path="res://20pxPanelStyle.tres" id="5_2ql6j"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_twppa"]
+content_margin_left = 50.0
+content_margin_top = 50.0
+content_margin_right = 50.0
+content_margin_bottom = 50.0
+bg_color = Color(0, 0, 0, 0.427451)
 
 [node name="Cuddlefish" type="Control"]
 layout_mode = 3
@@ -96,6 +103,7 @@ focus_mode = 0
 text = "Randomize"
 
 [node name="Reset" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer2"]
+visible = false
 custom_minimum_size = Vector2(128, 64)
 layout_mode = 2
 focus_mode = 0
@@ -179,6 +187,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_twppa")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="WinScreen"]
 layout_mode = 2
+text = "Lorem Ipsum"

@@ -22,6 +22,13 @@ window/size/viewport_height=900
 window/stretch/mode="canvas_items"
 window/stretch/scale_mode="integer"
 
+[input]
+
+instant_start={
+"deadzone": 0.5,
+"events": []
+}
+
 [rendering]
 
 renderer/rendering_method="mobile"

@@ -17,6 +17,10 @@ extends Control
 func _ready() -> void:
 	win_screen.hide()
 	make_connections()
+	#if Input.is_action_pressed("instant_start"):
+		#random_spin_all_cuddlers(5, true)
+	#else:
+		#random_spin_all_cuddlers(5)
 	random_spin_all_cuddlers(5)
 	grid.winstate.connect(win)
 
@@ -51,15 +55,16 @@ func check_win():
 func win():
 	win_screen.show()
 	
-func random_spin_all_cuddlers(extra_spins = 0) -> void:
+func random_spin_all_cuddlers(extra_spins = 0, instantaneous = false) -> void:
 	randomize_button.disabled = true
 	reset_button.disabled = true
 	check_button.disabled = true
 	var tree = get_tree()
 	tree.call_group('cuddlers','random_spin')
-	await get_tree().create_timer(1).timeout
+	if not instantaneous:
+		await get_tree().create_timer(1).timeout
 	if extra_spins > 0:
-		random_spin_all_cuddlers(extra_spins - 1)
+		random_spin_all_cuddlers(extra_spins - 1, instantaneous)
 	else:
 		randomize_button.disabled = false
 		reset_button.disabled = false

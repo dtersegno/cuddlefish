@@ -1,11 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://vs4xpav104sl"]
+[gd_scene load_steps=4 format=3 uid="uid://vs4xpav104sl"]
 
 [ext_resource type="Script" path="res://edge_block.gd" id="1_6mlxm"]
 [ext_resource type="Texture2D" uid="uid://oy0j7qxjxwdu" path="res://sprites/pipes.png" id="2_dc1i7"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tycso"]
+bg_color = Color(0.729412, 0.843137, 0.917647, 1)
+
 [node name="EdgeBlock" type="PanelContainer"]
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_tycso")
 script = ExtResource("1_6mlxm")
 
 [node name="GridContainer" type="GridContainer" parent="."]

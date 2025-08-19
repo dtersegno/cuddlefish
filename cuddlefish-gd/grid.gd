@@ -27,7 +27,7 @@ signal winstate
 #should be used to set up the puzzle as well
 var solution_coloring = {
 	'blue': {
-		0: [0, 6],
+		0: [0, 5],
 		1: [4, 0],
 		2: [4, 5],
 		6: [1, 6],
@@ -51,7 +51,7 @@ var solution_coloring = {
 		16: [5, 4],
 		15: [0, 2],
 		10: [6, 2],
-		5: [6, 2]},
+		5: [6, 3]},
 	'purple': {
 		0: [6, 0],
 		1: [4, 6],
@@ -108,7 +108,7 @@ var solution_coloring = {
 }
 
 var swap_plan_p = {
-	0:[5,1],
+	0:[6,1],
 	1:[3,6],
 	10:[1,5],
 	15:[3,5],
@@ -121,7 +121,7 @@ var swap_plan_p = {
 	14:[7,2],
 	4:[5,3],
 	3:[1,4],
-	5:[7,3]
+	5:[7,2]
 }
 var swap_plan_g = {
 	0:[2,7],

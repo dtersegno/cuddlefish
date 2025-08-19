@@ -20,9 +20,9 @@ func _ready() -> void:
 	win_screen.hide()
 	make_connections()
 	if Input.is_action_pressed("instant_start"):
-		random_spin_all_cuddlers(5, true)
+		random_spin_all_cuddlers(0, true)
 	else:
-		random_spin_all_cuddlers(5)
+		random_spin_all_cuddlers(4)
 	grid.winstate.connect(check_win)
 
 func handle_input():
@@ -38,13 +38,14 @@ func handle_input():
 	if Input.is_action_just_pressed("ui_up"):
 		grid.check_cuddler_directions()
 		self.check_win()
-	if Input.is_action_just_pressed("ui_left"):
-		self.reset_all_cuddlers()
+	#if Input.is_action_just_pressed("ui_left"):
+		#self.reset_all_cuddlers()
 		
 func make_connections():
 	randomize_button.pressed.connect(random_spin_all_cuddlers)
 	reset_button.pressed.connect(reset_all_cuddlers)
-	check_button.pressed.connect(check_win)
+	#check_button.pressed.connect(check_win)
+	check_button.pressed.connect(grid.perform_cuddler_comparison)
 	quit_button.pressed.connect(get_tree().quit)
 
 #doesn't actually perform the comparisons, but relies on DIRECTION.RIGHT for all
@@ -64,9 +65,11 @@ func win():
 	grid_shade.show()
 	win_screen.show()
 	shader.tween_property(grid_shade, 'self_modulate', Color(1,1,1,1), 1)
-	shader.tween_property(win_screen, 'modulate', Color(1,1,1,1), 3)
+	shader.tween_property(win_screen, 'modulate', Color(1,1,1,1), 2)
 	await shader.finished
 	win_screen.get_child(1).cycle_animation()
+	randomize_button.disabled = true
+	check_button.disabled = true
 	
 func random_spin_all_cuddlers(extra_spins = 0, instantaneous = false) -> void:
 	randomize_button.disabled = true
@@ -82,7 +85,6 @@ func random_spin_all_cuddlers(extra_spins = 0, instantaneous = false) -> void:
 		randomize_button.disabled = false
 		reset_button.disabled = false
 		check_button.disabled = false 
-		
 	grid.perform_cuddler_comparison()
 	
 func reset_all_cuddlers():

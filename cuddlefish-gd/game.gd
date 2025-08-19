@@ -53,7 +53,11 @@ func check_win():
 		win()
 	
 func win():
+	var shader = get_tree().create_tween()
+	win_screen.self_modulate = Color(1,1,1,0)
 	win_screen.show()
+	shader.tween_property(win_screen, 'self_modulate', Color(1,1,1,1), 2)
+	
 	
 func random_spin_all_cuddlers(extra_spins = 0, instantaneous = false) -> void:
 	randomize_button.disabled = true

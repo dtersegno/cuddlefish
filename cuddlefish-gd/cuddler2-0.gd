@@ -202,7 +202,7 @@ func _process(_delta: float) -> void:
 	#
 	if button.is_hovered():
 		self.modulate = Color(0.9,0.9,0.9,1)
-		print('hovor')
+		#print('hovering')
 	else:
 		self.modulate = Color(1,1,1,1)
 		

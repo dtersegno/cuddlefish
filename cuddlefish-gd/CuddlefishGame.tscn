@@ -5,11 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://ddml7s4viwma8" path="res://cuddler.tscn" id="2_3n4av"]
 [ext_resource type="Texture2D" uid="uid://blgbg8uwtudy5" path="res://sprites/cuddlegrid_nos.png" id="3_diwuv"]
 [ext_resource type="StyleBox" uid="uid://d1wxsbjir1u1" path="res://20pxPanelStyle.tres" id="5_2ql6j"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_twppa"]
-content_margin_left = 600.0
-content_margin_top = 400.0
-bg_color = Color(0, 0, 0, 0.427451)
+[ext_resource type="PackedScene" uid="uid://bgklg8p4lwbdt" path="res://lock.tscn" id="6_3lay2"]
 
 [node name="Cuddlefish" type="Control"]
 layout_mode = 3
@@ -120,6 +116,20 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Click on Cuddlefish. They'll spin around. Find the best arrangement for the party!"
 
+[node name="WinScreen" type="PanelContainer" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer2"]
+process_mode = 1
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer2/WinScreen"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Lock" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer2/WinScreen" instance=ExtResource("6_3lay2")]
+position = Vector2(217, 185)
+scale = Vector2(1.8, 1.8)
+
 [node name="Check" type="Button" parent="VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(128, 64)
 layout_mode = 2
@@ -178,15 +188,12 @@ text = "EE L"
 layout_mode = 2
 text = "EE D"
 
-[node name="WinScreen" type="PanelContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_twppa")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="WinScreen"]
+[node name="GridShade" type="PanelContainer" parent="."]
+visible = false
 layout_mode = 2
-text = "Hello"
+offset_left = 212.0
+offset_top = 19.0
+offset_right = 1162.0
+offset_bottom = 899.0
+size_flags_horizontal = 3
+size_flags_vertical = 3

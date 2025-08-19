@@ -11,18 +11,19 @@ extends Control
 # quitter
 @onready var quit_button = $VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer/QuitButton
 
-@onready var win_screen = $WinScreen
+@onready var win_screen = $VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer2/WinScreen
+
+var wonned = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	win_screen.hide()
 	make_connections()
-	#if Input.is_action_pressed("instant_start"):
-		#random_spin_all_cuddlers(5, true)
-	#else:
-		#random_spin_all_cuddlers(5)
-	random_spin_all_cuddlers(5)
-	grid.winstate.connect(win)
+	if Input.is_action_pressed("instant_start"):
+		random_spin_all_cuddlers(5, true)
+	else:
+		random_spin_all_cuddlers(5)
+	grid.winstate.connect(check_win)
 
 func handle_input():
 	if Input.is_action_pressed("ui_accept"):
@@ -49,15 +50,23 @@ func make_connections():
 #doesn't actually perform the comparisons, but relies on DIRECTION.RIGHT for all
 #cuddlers when they are properly arranged.
 func check_win():
-	if grid.check_cuddler_directions():
+	if grid.check_cuddler_directions() and not wonned:
+		wonned = true
+		randomize_button.disabled = true
+		check_button.disabled = true
 		win()
 	
 func win():
 	var shader = get_tree().create_tween()
-	win_screen.self_modulate = Color(1,1,1,0)
+	var grid_shade = $GridShade
+	win_screen.modulate = Color(1,1,1,0)
+	grid_shade.self_modulate = Color(1,1,1,0)
+	grid_shade.show()
 	win_screen.show()
-	shader.tween_property(win_screen, 'self_modulate', Color(1,1,1,1), 2)
-	
+	shader.tween_property(grid_shade, 'self_modulate', Color(1,1,1,1), 1)
+	shader.tween_property(win_screen, 'modulate', Color(1,1,1,1), 3)
+	await shader.finished
+	win_screen.get_child(1).cycle_animation()
 	
 func random_spin_all_cuddlers(extra_spins = 0, instantaneous = false) -> void:
 	randomize_button.disabled = true

@@ -8,15 +8,15 @@ extends Node2D
 @onready var D = $Body/VBoxContainer/HBoxContainer/D
 @onready var E = $Body/VBoxContainer/HBoxContainer/E
 var dials
-
+var solution = 'WOOED'
+var era = 0
 
 var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	dials = [A,B,C,D,E]
-	pop_it()
-	cycle_animation()
+	#cycle_animation()
 	pass # Replace with function body.
 
 
@@ -50,20 +50,46 @@ func pop_it():
 	).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_ELASTIC)
 	await hook_tween.finished
 
-func cycle_animation():
+func cycle_animation_old():
 	#var animation_timer = Timer.new()
 	#self.add_child(animation_timer)
 	#animation_timer.start()
 	while len(dials) > 0: #animation timer
 		var era_timer = Timer.new() #era timer (when letters stop moving
-		get_tree().root.add_child(era_timer)
+		#get_tree().root.add_child(era_timer)
+		#self.add_child.call_deferred(era_timer)
 		var frame_timer = Timer.new()
-		get_tree().root.add_child(frame_timer)
+		frame_timer.autostart = true
+		frame_timer.start(0.05)
+		#get_tree().root.add_child(frame_timer)
+		#self.add_child.call_deferred(frame_timer)
 		era_timer.start(0.5)
 		while era_timer.is_stopped:
-			frame_timer.start(0.05)
 			cycle_letters(dials)
 			
+			
+func cycle_animation():
+	#return null
+	#era timer
+	var era_timer = Timer.new()
+	self.add_child(era_timer)
+	era_timer.timeout.connect(era_ended.bind(era_timer))
+	era_timer.start(.8)
+	while len(dials) > 0:
+		cycle_letters(dials)
+		await get_tree().create_timer(0.05).timeout
+	era_timer.queue_free()
+	pop_it()
+
+func era_ended(timer):
+	#shake the lock a tiny bit
+	var lock_shaker = create_tween()
+	lock_shaker.tween_property(self, "position", self.position + Vector2(0,3), 0.05)
+	lock_shaker.tween_property(self, "position", self.position - Vector2(0,3), 0.05)
+	dials[0].text = solution[era]
+	self.era += 1
+	dials.remove_at(0)
+	timer.start(.8)
 
 func auto_cycle():
 	await get_tree().create_timer(0.1).timeout
